@@ -1,0 +1,27 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "GNU",
+	"compiler-simulate-id" : "",
+	"config" : "Debug",
+	"cxx-modules" : {},
+	"database-info" : null,
+	"dir-cur-bld" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/cmake-build-debug",
+	"dir-cur-src" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3",
+	"dir-top-bld" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/cmake-build-debug",
+	"dir-top-src" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : [],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/cmake-build-debug/CMakeFiles/Practica3.dir",
+	"sources" : 
+	{
+		"CMakeFiles/Practica3.dir/main.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+		}
+	}
+}

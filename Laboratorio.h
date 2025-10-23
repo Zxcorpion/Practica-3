@@ -1,6 +1,3 @@
-//
-// Created by admin on 21/10/2025.
-//
 
 #ifndef PRACTICA3_LABORATORIO_H
 #define PRACTICA3_LABORATORIO_H
