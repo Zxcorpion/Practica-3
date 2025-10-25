@@ -5,38 +5,44 @@
 
 #include "VDinamico.h"
 #include <iostream>
+
 //Hay que saber cuantos nodos tiene un arbol usando un contador
-template<typename U>
-class NodoA {
-    public:
-    NodoA<U> *izq, *der;
-    U dato;
-    char bal;
-    NodoA<U>() : izq(nullptr), der(nullptr), dato(0),bal(0) {}
-    NodoA(U &ele): izq(0), der(0),dato(ele),bal(0){}
-    NodoA(const U &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
+template <class N>
+class NodoA{
+public:
+    NodoA<N> *izq, *der;
+    N dato;
+    char bal = 0;
+    NodoA<N>(): izq(0), der(0),dato(0),bal(0){}
+    NodoA(N &ele): izq(0), der(0), dato(ele),bal(0){}
+    NodoA(const N &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
 };
+
+
 template<typename A>
 class AVL {
+private:
     NodoA<A> *raiz;
-    unsigned int numEle=0, altura=0;
-    private:
+    unsigned int altura = 0, numEle = 0;
+//Metodos privados
     void preorden (NodoA<A> *p, int nivel);
     void inorden (NodoA<A> *p, int nivel);
-    void postorden (NodoA<A> *p, int nivel);
+    void postorden(NodoA<A> *p, int nivel);
     int inserta(NodoA<A>* &n, A &dato);
     void rotDecha(NodoA<A>* &n);
     void rotIzqda(NodoA<A>* &n);
     void destruir(NodoA<A> *&p);
-    NodoA<A>* copiar(NodoA<A> *&p);
+    NodoA<A>* copiar(NodoA<A> *p);
     A* buscaRecursiva(A &dato,NodoA<A>* &p);
     unsigned int numElem(NodoA<A>* &p,unsigned int& auxiliar);
     unsigned int altu(NodoA<A>* p,int alturaactual);
-    T* buscaIterativa(T &dato,Nodo<A>* p);
-   public:
-    AVL<A>(): raiz(0), numEle(0),altura(0){}
+    A* buscaIterativa(A &dato,NodoA<A>* p);
+
+public:
+    AVL<A>(): raiz(0), numEle(0), altura(0){}
     AVL<A>(const AVL<A> &orig);
     virtual ~AVL<A>();
+
     bool insertar (A &elem) {
         numEle++;
         return inserta(raiz, elem);
@@ -49,50 +55,50 @@ class AVL {
         int aux=0;
         return numElem(raiz,aux);
     }
-    unsigned int altura() {
+    unsigned int get_altura() {
         altura=0;
         return altu(raiz,1);
     }
-    T* buscaIt(T &dato){return buscaIterativa(dato,raiz);}
+    A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
-template <class A>
- void Abb<A>::preorden (NodoA<A> *p, int nivel){
+template <typename A>
+ void AVL<A>::preorden (NodoA<A> *p, int nivel){
     if (p){
         // Sustituir por procesamiento --
-        cout << "Procesando nodo "<< p->dato ;
-        cout << "en el nivel " << nivel << endl;
+        std::cout << "Procesando nodo "<< p->dato ;
+        std::cout << "en el nivel " << nivel << std::endl;
         // ----------
         preorden (p->izq, nivel+1);
         preorden (p->der, nivel+1);
     }
 }
 
-template <class A>
- void Abb<A>::inorden (NodoA<A> *p, int nivel){
+template <typename A>
+ void AVL<A>::inorden (NodoA<A> *p, int nivel){
     if (p){
         inorden (p->izq, nivel+1);
         // Sustituir por procesamiento ---
-        cout << "Procesando nodo " << p->dato;
-        cout << "en el nivel " << nivel << endl;
+        std::cout << "Procesando nodo " << p->dato;
+        std::cout << "en el nivel " << nivel << std::endl;
         // ----------
         inorden (p->der, nivel+1);
     }
 }
-template <class A>
-void Abb<A>::postorden (NodoA<A> *p, int nivel){
+template <typename A>
+void AVL<A>::postorden (NodoA<A> *p, int nivel){
     if (p){
         postorden (p->izq, nivel+1);
         postorden (p->der, nivel+1);
         // Sustituir por procesamiento ----
-        cout << "Procesando nodo "<< p->dato;
-        cout << "en el nivel " << nivel << endl;
+        std::cout << "Procesando nodo "<< p->dato;
+        std::cout << "en el nivel " << nivel << std::endl;
         // ----------
     }
 }
 
 
 template<typename A>
-void Avl<A>::rotIzqda(NodoA<A>* &p){
+void AVL<A>::rotIzqda(NodoA<A>* &p){
     NodoA<A> *q = p, *r;
     p = r = q->der;
     q->der = r->izq;
@@ -103,7 +109,7 @@ void Avl<A>::rotIzqda(NodoA<A>* &p){
     if(q->bal > 0) r->bal += q->bal;
 }
 template<typename A>
-void Avl<A>::rotDecha(NodoA<A>* &p){
+void AVL<A>::rotDecha(NodoA<A>* &p){
     NodoA<A> *q = p, *l;
     p = l = q->izq;
     q->izq = l->der;
@@ -115,7 +121,7 @@ void Avl<A>::rotDecha(NodoA<A>* &p){
 }
 
 template<typename A>
- int Avl<A>::inserta(NodoA<A>* &c, A &dato){
+ int AVL<A>::inserta(NodoA<A>* &c, A &dato){
     NodoA<A> *p = c;
     int deltaH = 0;
     if (!p){
@@ -143,6 +149,7 @@ template<typename A>
 template<typename A>
 void AVL<A>::destruir(NodoA<A> *&p) { //Ponemos *& porque modificamos el arbol
     if (p != nullptr) {
+        //Aqui destruimos el arbol con postorden
         destruir(p->izq);
         destruir(p->der);
         delete p;
@@ -156,6 +163,7 @@ NodoA<A>* AVL<A>::copiar(NodoA<A> *p) {
     if (!p) {
         return 0;
     }
+    //Copiamos desde preorden
         NodoA<A> *q = new NodoA<A>(p->dato); //Creamos un nodo y de ahi los hijos en caso de que los tenga
         q->izq = copiar(p->izq);
         q->der = copiar(p->der);
@@ -181,8 +189,10 @@ AVL<A> &AVL<A>::operator=(const AVL<A> &orig) {
     }
     return *this;
 }
+
 template<typename A>
 A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
+    //Utilizamos el preorden
     if(p->dato==dato) {
         return p->dato;
     }else {
@@ -217,7 +227,7 @@ unsigned int AVL<A>::altu(NodoA<A> *p,int alturaactual) {
     return altura;
 }
 template<typename A>
-T *AVL<A>::buscaIterativa(T &dato, NodoA<A> *p) {
+A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
     //Mediante un while comprobamos todos los datos de todos los nodos aprovechando que sabemos que un arbol AVL se encuentra en orden
     while(p) {
         if(p->dato==dato) {
@@ -235,4 +245,6 @@ T *AVL<A>::buscaIterativa(T &dato, NodoA<A> *p) {
 
 
 
+
 #endif //PRACTICA3_AVL_H
+
