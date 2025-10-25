@@ -65,7 +65,71 @@ build CMakeFiles/Practica3.dir/main.cpp.obj: CXX_COMPILER__Practica3_scanned_Deb
   OBJECT_FILE_DIR = CMakeFiles\Practica3.dir
   dyndep = CMakeFiles/Practica3.dir/CXX.dd
 
-build CMakeFiles/Practica3.dir/CXX.dd | C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/cmake-build-debug/CMakeFiles/Practica3.dir/CXXModules.json CMakeFiles/Practica3.dir/main.cpp.obj.modmap: CXX_DYNDEP__Practica3_Debug CMakeFiles/Practica3.dir/main.cpp.obj.ddi | C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/cmake-build-debug/CMakeFiles/Practica3.dir/CXXDependInfo.json
+build CMakeFiles/Practica3.dir/Laboratorio.cpp.obj.ddi: CXX_SCAN__Practica3_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/Laboratorio.cpp || cmake_object_order_depends_target_Practica3
+  DEP_FILE = CMakeFiles\Practica3.dir\Laboratorio.cpp.obj.ddi.d
+  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\Practica3.dir\Laboratorio.cpp.obj.ddi
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJ_FILE = CMakeFiles\Practica3.dir\Laboratorio.cpp.obj
+  PREPROCESSED_OUTPUT_FILE = CMakeFiles\Practica3.dir\Laboratorio.cpp.obj.ddi.i
+
+build CMakeFiles/Practica3.dir/Laboratorio.cpp.obj: CXX_COMPILER__Practica3_scanned_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/Laboratorio.cpp | CMakeFiles/Practica3.dir/Laboratorio.cpp.obj.modmap || cmake_object_order_depends_target_Practica3 CMakeFiles/Practica3.dir/CXX.dd
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\Practica3.dir\Laboratorio.cpp.obj.d
+  DYNDEP_MODULE_MAP_FILE = CMakeFiles\Practica3.dir\Laboratorio.cpp.obj.modmap
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\Practica3.dir
+  OBJECT_FILE_DIR = CMakeFiles\Practica3.dir
+  dyndep = CMakeFiles/Practica3.dir/CXX.dd
+
+build CMakeFiles/Practica3.dir/Farmacia.cpp.obj.ddi: CXX_SCAN__Practica3_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/Farmacia.cpp || cmake_object_order_depends_target_Practica3
+  DEP_FILE = CMakeFiles\Practica3.dir\Farmacia.cpp.obj.ddi.d
+  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\Practica3.dir\Farmacia.cpp.obj.ddi
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJ_FILE = CMakeFiles\Practica3.dir\Farmacia.cpp.obj
+  PREPROCESSED_OUTPUT_FILE = CMakeFiles\Practica3.dir\Farmacia.cpp.obj.ddi.i
+
+build CMakeFiles/Practica3.dir/Farmacia.cpp.obj: CXX_COMPILER__Practica3_scanned_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/Farmacia.cpp | CMakeFiles/Practica3.dir/Farmacia.cpp.obj.modmap || cmake_object_order_depends_target_Practica3 CMakeFiles/Practica3.dir/CXX.dd
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\Practica3.dir\Farmacia.cpp.obj.d
+  DYNDEP_MODULE_MAP_FILE = CMakeFiles\Practica3.dir\Farmacia.cpp.obj.modmap
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\Practica3.dir
+  OBJECT_FILE_DIR = CMakeFiles\Practica3.dir
+  dyndep = CMakeFiles/Practica3.dir/CXX.dd
+
+build CMakeFiles/Practica3.dir/MediExpress.cpp.obj.ddi: CXX_SCAN__Practica3_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/MediExpress.cpp || cmake_object_order_depends_target_Practica3
+  DEP_FILE = CMakeFiles\Practica3.dir\MediExpress.cpp.obj.ddi.d
+  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\Practica3.dir\MediExpress.cpp.obj.ddi
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJ_FILE = CMakeFiles\Practica3.dir\MediExpress.cpp.obj
+  PREPROCESSED_OUTPUT_FILE = CMakeFiles\Practica3.dir\MediExpress.cpp.obj.ddi.i
+
+build CMakeFiles/Practica3.dir/MediExpress.cpp.obj: CXX_COMPILER__Practica3_scanned_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/MediExpress.cpp | CMakeFiles/Practica3.dir/MediExpress.cpp.obj.modmap || cmake_object_order_depends_target_Practica3 CMakeFiles/Practica3.dir/CXX.dd
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\Practica3.dir\MediExpress.cpp.obj.d
+  DYNDEP_MODULE_MAP_FILE = CMakeFiles\Practica3.dir\MediExpress.cpp.obj.modmap
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\Practica3.dir
+  OBJECT_FILE_DIR = CMakeFiles\Practica3.dir
+  dyndep = CMakeFiles/Practica3.dir/CXX.dd
+
+build CMakeFiles/Practica3.dir/PaMedicamento.cpp.obj.ddi: CXX_SCAN__Practica3_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/PaMedicamento.cpp || cmake_object_order_depends_target_Practica3
+  DEP_FILE = CMakeFiles\Practica3.dir\PaMedicamento.cpp.obj.ddi.d
+  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\Practica3.dir\PaMedicamento.cpp.obj.ddi
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJ_FILE = CMakeFiles\Practica3.dir\PaMedicamento.cpp.obj
+  PREPROCESSED_OUTPUT_FILE = CMakeFiles\Practica3.dir\PaMedicamento.cpp.obj.ddi.i
+
+build CMakeFiles/Practica3.dir/PaMedicamento.cpp.obj: CXX_COMPILER__Practica3_scanned_Debug C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/PaMedicamento.cpp | CMakeFiles/Practica3.dir/PaMedicamento.cpp.obj.modmap || cmake_object_order_depends_target_Practica3 CMakeFiles/Practica3.dir/CXX.dd
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\Practica3.dir\PaMedicamento.cpp.obj.d
+  DYNDEP_MODULE_MAP_FILE = CMakeFiles\Practica3.dir\PaMedicamento.cpp.obj.modmap
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\Practica3.dir
+  OBJECT_FILE_DIR = CMakeFiles\Practica3.dir
+  dyndep = CMakeFiles/Practica3.dir/CXX.dd
+
+build CMakeFiles/Practica3.dir/CXX.dd | C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/cmake-build-debug/CMakeFiles/Practica3.dir/CXXModules.json CMakeFiles/Practica3.dir/main.cpp.obj.modmap CMakeFiles/Practica3.dir/Laboratorio.cpp.obj.modmap CMakeFiles/Practica3.dir/Farmacia.cpp.obj.modmap CMakeFiles/Practica3.dir/MediExpress.cpp.obj.modmap CMakeFiles/Practica3.dir/PaMedicamento.cpp.obj.modmap: CXX_DYNDEP__Practica3_Debug CMakeFiles/Practica3.dir/main.cpp.obj.ddi CMakeFiles/Practica3.dir/Laboratorio.cpp.obj.ddi CMakeFiles/Practica3.dir/Farmacia.cpp.obj.ddi CMakeFiles/Practica3.dir/MediExpress.cpp.obj.ddi CMakeFiles/Practica3.dir/PaMedicamento.cpp.obj.ddi | C$:/Users/pablo/Downloads/Segundo$ Curso/Estructuras/Practicas/Practica3/cmake-build-debug/CMakeFiles/Practica3.dir/CXXDependInfo.json
 
 
 # =============================================================================
@@ -75,7 +139,7 @@ build CMakeFiles/Practica3.dir/CXX.dd | C$:/Users/pablo/Downloads/Segundo$ Curso
 #############################################
 # Link the executable Practica3.exe
 
-build Practica3.exe: CXX_EXECUTABLE_LINKER__Practica3_Debug CMakeFiles/Practica3.dir/main.cpp.obj
+build Practica3.exe: CXX_EXECUTABLE_LINKER__Practica3_Debug CMakeFiles/Practica3.dir/main.cpp.obj CMakeFiles/Practica3.dir/Laboratorio.cpp.obj CMakeFiles/Practica3.dir/Farmacia.cpp.obj CMakeFiles/Practica3.dir/MediExpress.cpp.obj CMakeFiles/Practica3.dir/PaMedicamento.cpp.obj
   CONFIG = Debug
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

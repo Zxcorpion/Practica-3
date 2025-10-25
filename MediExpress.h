@@ -9,19 +9,23 @@
 #include <string>
 #include <sstream>
 #include <ctime>
+
+#include "AVL.h"
 #include "PaMedicamento.h"
 #include "Laboratorio.h"
 #include "VDinamico.h"
 #include "Lista.h"
+#include "Farmacia.h"
 
 
 class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;
     ListaEnlazada<Laboratorio> labs;
+    //AVL<Farmacia> pharmacy;
 public:
     MediExpress();
-    MediExpress(const std::string &medicamentos, const std::string &laboratorios);
+    MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias);
     MediExpress(const MediExpress &orig);
     ~MediExpress();
 

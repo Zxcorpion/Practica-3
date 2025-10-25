@@ -18,6 +18,26 @@
 	"module-dir" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/cmake-build-debug/CMakeFiles/Practica3.dir",
 	"sources" : 
 	{
+		"CMakeFiles/Practica3.dir/Farmacia.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.cpp"
+		},
+		"CMakeFiles/Practica3.dir/Laboratorio.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Laboratorio.cpp"
+		},
+		"CMakeFiles/Practica3.dir/MediExpress.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
+		},
+		"CMakeFiles/Practica3.dir/PaMedicamento.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/PaMedicamento.cpp"
+		},
 		"CMakeFiles/Practica3.dir/main.cpp.obj" : 
 		{
 			"language" : "CXX",

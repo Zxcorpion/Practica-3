@@ -14,7 +14,7 @@ medication(),labs()
  * @param laboratorios pasador por referencia
  * @post Se crea un objeto de la clase MediExpress con los valores pasados por cabecera
  */
-MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios) {
+MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias) {
     std::ifstream is;
     std::stringstream  columnas;
     std::string fila;
@@ -23,7 +23,6 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
     std::string id_number_string = "";
     std::string id_alpha="";
     std::string nombre="";
-
 
 
     is.open(medicamentos); //carpeta de proyecto
@@ -160,6 +159,9 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
             cont++;
     }
     std::cout << "Medicamentos sin asignar: " << cont << std::endl;
+
+    //Leemos el tercer archivo
+
 }
 
 /**

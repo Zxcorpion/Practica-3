@@ -5,12 +5,14 @@
 #ifndef PRACTICA3_FARMACIA_H
 #define PRACTICA3_FARMACIA_H
 #include <iostream>
+#include "MediExpress.h"
 
 
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
     nombre_="-",direccion_="-",codPostal_="-";
+    //MediExpress *linkMedi;
 public:
     Farmacia(std::string cif="-",std::string provincia="-",std::string localidad="-",
     std::string nombre="-",std::string direccion="-",std::string codPostal="-");
@@ -31,7 +33,9 @@ public:
     void set_cod_postal(const std::string &cod_postal);
 
     Farmacia &operator=(const Farmacia& orig);
-    bool &operator==(const Farmacia &orig);
+    bool operator==(const Farmacia &orig) const;
+    bool operator<(const Farmacia &orig) const;
+    bool operator>(const Farmacia &orig) const;
 };
 
 

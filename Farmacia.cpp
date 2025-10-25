@@ -12,7 +12,7 @@ codPostal_(codPostal)
 
 Farmacia::Farmacia(const Farmacia &orig):
 cif_(orig.cif_),
-provincia_(provincia_),
+provincia_(orig.provincia_),
 localidad_(orig.localidad_),
 nombre_(orig.nombre_),
 direccion_(orig.direccion_),
@@ -79,4 +79,14 @@ Farmacia &Farmacia::operator=(const Farmacia &orig) {
     }
     return *this;
 }
+bool Farmacia::operator<(const Farmacia &orig) const{
+    return cif_ < orig.cif_;
+}
+bool Farmacia::operator==(const Farmacia &orig) const{
+    return cif_ == orig.cif_;
+}
+bool Farmacia::operator>(const Farmacia &orig) const {
+    return cif_ > orig.cif_;
+}
+
 
