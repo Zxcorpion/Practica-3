@@ -138,7 +138,34 @@ VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
     }
     return vectorFarmacia;
 }
-
+void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,std::string cifs[],float &tiempo) {
+    clock_t t_ini = clock();
+    for(int i=0;i<500;i++) {
+        if(arbol.buscaRec(vectorFarmacias[i])==nullptr) {
+            std::cout<<"No se encontro"<<std::endl;
+        }else {
+            if(arbol.buscaRec(vectorFarmacias[i])->get_cif()!=cifs[i]){
+                std::cout<<"CIF no encontrado"<<std::endl;
+            }else {
+                std::cout<<cifs[i]<<std::endl;
+            }
+        }
+    }
+    std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    tiempo=((clock() - t_ini) / (float) CLOCKS_PER_SEC);
+}
+void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[],float &tiempo) {
+    clock_t t_ini = clock();
+    for(int i=0;i<500;i++) {
+        if(vectorFarmacias[i].get_cif()!=cifs[i]) {
+            std::cout<<"No se encontro"<<std::endl;
+        }else {
+            std::cout<<cifs[i]<<std::endl;
+        }
+    }
+    std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    tiempo=((clock() - t_ini) / (float) CLOCKS_PER_SEC);
+}
 int main() {
     //Prueba 1
     std::cout<<"Insercion de las farmacias en un arbol"<<std::endl;
@@ -152,10 +179,18 @@ int main() {
     for (int i=0; i<500; i++) {
         vectorCIFS[i] = v1[i].get_cif();
     }
-    for (int i=0; i<500; i++) {
-        a1.buscaRec(v1[i].get_cif());
+    float tiempo1=0, tiempo2=0;
+    calcularbusqueda(v1,a1,vectorCIFS,tiempo1);
+    busquedasegundotipo(v1,vectorCIFS,tiempo2);
+    if(tiempo1>tiempo2) {
+        std::cout<<"Es mas eficiente buscar en AVL"<<std::endl;
+    }else {
+        if(tiempo2>tiempo1) {
+            std::cout<<"Es mas eficiente buscar en un vector dinamico"<<std::endl;
+        }
     }
-
-
+    if(tiempo1==tiempo2) {
+        std::cout<<"Igual de eficiente"<<std::endl;
+    }
     return 0;
 }
