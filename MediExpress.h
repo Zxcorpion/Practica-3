@@ -22,7 +22,7 @@ class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;
     ListaEnlazada<Laboratorio> labs;
-    //AVL<Farmacia> pharmacy;
+    AVL<Farmacia> pharmacy;
 public:
     MediExpress();
     MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias);

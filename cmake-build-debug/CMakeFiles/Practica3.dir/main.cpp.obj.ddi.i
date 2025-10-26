@@ -64171,28 +64171,25 @@ int VDinamico<T>::busquedaBinaria(T &d) {
 # 4 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/AVL.h" 2
 
 
-
-template <typename N>
-class NodoA{
-public:
-    NodoA<N> *izq, *der;
-    N dato;
-    char bal = 0;
-    NodoA(): izq(0), der(0),dato(0),bal(0){}
-    NodoA(N &ele): izq(0), der(0), dato(ele),bal(0){}
-    NodoA(const N &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
+template<typename U>
+class NodoA {
+    public:
+    NodoA<U> *izq, *der;
+    U dato;
+    char bal;
+    NodoA(): izq(0), der(0), dato(0),bal(0) {}
+    NodoA(U &ele): izq(0), der(0),dato(ele),bal(0){}
+    NodoA(const U &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
 };
-
-
 template<typename A>
 class AVL {
-private:
     NodoA<A> *raiz;
-    unsigned int altura = 0, numEle = 0;
-
-    void preorden (NodoA<A> *p, int nivel);
-    void inorden (NodoA<A> *p, int nivel);
-    void postorden(NodoA<A> *p, int nivel);
+    unsigned int altura=0,numEle=0;
+    private:
+    void preorden (NodoA<A> *p, VDinamico<A> &aux);
+    void inorden (NodoA<A> *p, VDinamico<A> &aux);
+    void postorden (NodoA<A> *p, VDinamico<A> &aux);
+    NodoA<A> buscaClave(A &ele, NodoA<A> *p);
     int inserta(NodoA<A>* &n, A &dato);
     void rotDecha(NodoA<A>* &n);
     void rotIzqda(NodoA<A>* &n);
@@ -64202,22 +64199,31 @@ private:
     unsigned int numElem(NodoA<A>* &p,unsigned int& auxiliar);
     unsigned int altu(NodoA<A>* p);
     A* buscaIterativa(A &dato,NodoA<A>* p);
-
-public:
-    AVL(): raiz(0), numEle(0), altura(0){}
+   public:
+    AVL(): raiz(0), numEle(0),altura(0){}
     AVL(const AVL<A> &orig);
     virtual ~AVL();
-
+    bool buscar(A &ele, A &resultado);
     bool insertar (A &elem) {
-        bool resultado = inserta(raiz, elem);
-        if (resultado) {
+        bool resultado=inserta(raiz, elem);
+        if(resultado!=false) {
             numEle++;
         }
         return resultado;
     }
-    void recorrePreorden() { preorden(raiz,0); }
-    VDinamico<A*> recorreInorden(){inorden(raiz, 0);}
-    void recorrePostorden() { postorden(raiz,0); }
+    VDinamico<A> recorrePreorden(){
+        VDinamico<A> vector;
+        preorden(raiz, vector);
+        return vector;}
+    VDinamico<A> recorreInorden() {
+        VDinamico<A> vector;
+        inorden(raiz, vector);
+        return vector;
+    }
+    VDinamico<A> recorrePostorden(){
+        VDinamico<A> vector;
+        postorden(raiz, vector);
+        return vector;}
     AVL<A> &operator=(const AVL<A> &orig);
     A* buscaRec(A &dato){return buscaRecursiva(dato,raiz);}
     unsigned int numElementos() {
@@ -64225,42 +64231,36 @@ public:
         return numElem(raiz,aux);
     }
     unsigned int get_altura() {
-        altura = altu(raiz);
+        altura=altu(raiz);
         return altura;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
-template <typename A>
- void AVL<A>::preorden (NodoA<A> *p, int nivel){
+template <class A>
+ void AVL<A>::preorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
 
-        std::cout << "Procesando nodo "<< p->dato ;
-        std::cout << " en el nivel " << nivel << std::endl;
-
-        preorden (p->izq, nivel+1);
-        preorden (p->der, nivel+1);
+        aux.insertar(p->dato);
+        preorden (p->izq, aux);
+        preorden (p->der, aux);
     }
 }
 
-template <typename A>
- void AVL<A>::inorden (NodoA<A> *p, int nivel){
+template <class A>
+void AVL<A>::inorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
-        inorden (p->izq, nivel+1);
+        inorden (p->izq, aux);
+        aux.insertar (p->dato);
 
-        std::cout << "Procesando nodo " << p->dato;
-        std::cout << " en el nivel " << nivel << std::endl;
-
-        inorden (p->der, nivel+1);
+        inorden (p->der, aux);
     }
 }
-template <typename A>
-void AVL<A>::postorden (NodoA<A> *p, int nivel){
+template <class A>
+void AVL<A>::postorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
-        postorden (p->izq, nivel+1);
-        postorden (p->der, nivel+1);
-
-        std::cout << "Procesando nodo "<< p->dato;
-        std::cout << " en el nivel " << nivel << std::endl;
+        postorden (p->izq, aux);
+        postorden (p->der, aux);
+        aux.insertar(p->dato);
 
     }
 }
@@ -64288,7 +64288,25 @@ void AVL<A>::rotDecha(NodoA<A>* &p){
     l->bal--;
     if(q->bal < 0) l->bal -= -q->bal;
 }
-
+template<typename A>
+NodoA<A> AVL<A>::buscaClave(A &ele, NodoA<A> *p) {
+    if (!p)
+        return 0;
+    else if (ele < p->dato)
+        return buscaClave (ele, p->izq);
+    else if (ele > p-> dato)
+        return buscaClave (ele, p->der);
+    else return p;
+}
+template<typename A>
+bool AVL<A>::buscar(A &ele, A &resultado) {
+    NodoA<A> *p = buscaClave (ele, raiz);
+    if (p) {
+        resultado = p->dato;
+        return true;
+    }
+    return false;
+}
 template<typename A>
  int AVL<A>::inserta(NodoA<A>* &c, A &dato){
     NodoA<A> *p = c;
@@ -64315,7 +64333,6 @@ template<typename A>
             } } }
     return deltaH;
 }
-
 template<typename A>
 void AVL<A>::destruir(NodoA<A> *&p) {
     if (p != nullptr) {
@@ -64333,7 +64350,6 @@ NodoA<A>* AVL<A>::copiar(NodoA<A> *p) {
     if (!p) {
         return 0;
     }
-
         NodoA<A> *q = new NodoA<A>(p->dato);
         q->izq = copiar(p->izq);
         q->der = copiar(p->der);
@@ -64348,13 +64364,12 @@ numEle(orig.numEle)
     raiz = 0 ;
     raiz = copiar(orig.raiz);
 }
-
 template<typename A>
 AVL<A>::~AVL() {
-    destruir(raiz);
+    if(raiz!=nullptr) {
+        destruir(raiz);
+    }
 }
-
-
 template<typename A>
 AVL<A> &AVL<A>::operator=(const AVL<A> &orig) {
     if (this != &orig) {
@@ -64365,17 +64380,20 @@ AVL<A> &AVL<A>::operator=(const AVL<A> &orig) {
     }
     return *this;
 }
-
 template<typename A>
 A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
-
+    if(p==nullptr)
+        return nullptr;
     if(p->dato==dato) {
-        return p->dato;
+        return &p->dato;
     }else {
-        buscaRecursiva(dato, p->izq);
-        buscaRecursiva(dato, p->der);
+
+        A* encontrado = buscaRecursiva(dato, p->izq);
+        if (encontrado != nullptr)
+            return encontrado;
+
+        return buscaRecursiva(dato, p->der);
     }
-    return 0;
 }
 template<typename A>
 unsigned int AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
@@ -64394,8 +64412,8 @@ unsigned int AVL<A>::altu(NodoA<A> *p) {
     }
     if(p) {
 
-       unsigned int alt_izq = altu(p->izq);
-       unsigned int alt_der = altu(p->der);
+        unsigned int alt_izq = altu(p->izq);
+        unsigned int alt_der = altu(p->der);
         if (alt_der < alt_izq) {
             return 1+alt_izq;
         }else {
@@ -64403,12 +64421,13 @@ unsigned int AVL<A>::altu(NodoA<A> *p) {
         }
     }
 }
+
 template<typename A>
 A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
 
     while(p) {
         if(p->dato==dato) {
-            return p->dato;
+            return &dato;
         }else if(dato<p->dato) {
             p = p->izq;
         }else {
@@ -64860,17 +64879,7 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
 }
 # 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
-
-
-
-
-
-
-
-# 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 1
-# 9 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
-
-
+# 11 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
@@ -64907,7 +64916,7 @@ class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;
     ListaEnlazada<Laboratorio> labs;
-
+    AVL<Farmacia> pharmacy;
 public:
     MediExpress();
     MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias);
@@ -64928,13 +64937,7 @@ public:
     void borrarLaboratorio(const std::string &nombreCiudad);
 };
 # 5 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 2
-
-
-
-
-
-
-
+# 17 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
 AVL<Farmacia> leeFicheroArbol(const std::string &fichero) {
     std::ifstream is;
     std::stringstream columnas;
@@ -64971,6 +64974,8 @@ AVL<Farmacia> leeFicheroArbol(const std::string &fichero) {
                 getline(columnas, direccion_,';');
                 getline(columnas, codPostal_,';');
 
+                fila="";
+                columnas.clear();
 
                 Farmacia farmacia_(cif_,provincia_,localidad_,nombre_, direccion_, codPostal_);
                 try {
@@ -64979,10 +64984,6 @@ AVL<Farmacia> leeFicheroArbol(const std::string &fichero) {
                     std::cerr<<e.what()<<std::endl;
                 }
 
-                fila="";
-                columnas.str(std::string());
-                columnas.clear();
-                columnas.str(fila);
 
                 std::cout << ++contador
                           << " Farmacia: ( CIF = " << cif_
@@ -64995,15 +64996,21 @@ AVL<Farmacia> leeFicheroArbol(const std::string &fichero) {
         is.close();
 
         std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
-# 71 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+# 74 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
                                                                           1000
-# 71 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+# 74 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
                                                                                         ) << " segs." << std::endl;
     } else {
         std::cout << "Error de apertura en archivo" << std::endl;
     }
     return arbolFarmacia;
 }
+
+
+
+
+
+
 
 VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
     std::ifstream is;
@@ -65063,15 +65070,75 @@ VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
         is.close();
 
         std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
-# 135 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+# 144 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
                                                                           1000
-# 135 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+# 144 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
                                                                                         ) << " segs." << std::endl;
     } else {
         std::cout << "Error de apertura en archivo" << std::endl;
     }
     return vectorFarmacia;
 }
+
+
+void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,std::string cifs[],float &tiempo) {
+    clock_t t_ini = clock();
+    for(int i=0;i<500;i++) {
+        if(arbol.buscaRec(vectorFarmacias[i])==nullptr) {
+            std::cout<<"No se encontro"<<std::endl;
+        }else {
+            if(arbol.buscaRec(vectorFarmacias[i])->get_cif()!=cifs[i]){
+                std::cout<<"CIF no encontrado"<<std::endl;
+            }else {
+                std::cout<<cifs[i]<<std::endl;
+            }
+        }
+    }
+    std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
+# 165 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+                                                                      1000
+# 165 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+                                                                                    ) << " segs." << std::endl;
+    tiempo=((clock() - t_ini) / (float) 
+# 166 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+                                       1000
+# 166 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+                                                     );
+}
+void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[],float &tiempo) {
+    clock_t t_ini = clock();
+    for(int i=0;i<500;i++) {
+        if(vectorFarmacias[i].get_cif()!=cifs[i]) {
+            std::cout<<"No se encontro"<<std::endl;
+        }else {
+            std::cout<<cifs[i]<<std::endl;
+        }
+    }
+    std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
+# 177 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+                                                                      1000
+# 177 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+                                                                                    ) << " segs." << std::endl;
+    tiempo=((clock() - t_ini) / (float) 
+# 178 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+                                       1000
+# 178 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+                                                     );
+}
+
+void mostrarFarmacia(Farmacia &farma) {
+    std::cout<<"CIF = " << farma.get_cif()
+    << ", Provincia = " << farma.get_provincia()
+    << ", Localidad = " << farma.get_localidad()
+    << ", Nombre = " << farma.get_nombre()
+    << ", Direccion = " << farma.get_direccion()
+    << ", CodPostal = " << farma.get_cod_postal()
+    << std::endl;
+}
+
+
+
+
 
 int main() {
 
@@ -65082,12 +65149,38 @@ int main() {
     VDinamico<Farmacia> v1 = leeFicheroVector("../farmacias.csv");
     std::cout<<"\n";
 
+    std::cout<<"Muestra por pantalla de las primeras 500 farmacias"<<std::endl;
     std::string vectorCIFS[500];
     for (int i=0; i<500; i++) {
         vectorCIFS[i] = v1[i].get_cif();
     }
 
+    std::cout<<"\n";
+    std::cout<<"Conteo del tiempo sobre el arbol y sobre el vector"<<std::endl;
 
+    float tiempo1=0, tiempo2=0;
+    calcularbusqueda(v1,a1,vectorCIFS,tiempo1);
+    busquedasegundotipo(v1,vectorCIFS,tiempo2);
+    if(tiempo1 > tiempo2) {
+        std::cout<<"Es mas eficiente buscar en AVL"<<std::endl;
+    }else {
+        if(tiempo2 > tiempo1) {
+            std::cout<<"Es mas eficiente buscar en un vector dinamico"<<std::endl;
+        }
+    }
+    if(tiempo1==tiempo2) {
+        std::cout<<"Igual de eficiente"<<std::endl;
+    }
+    std::cout<<"\n";
+
+    std::cout<<"La altura del arbol de farmacias es de: "<<a1.get_altura();
+    std::cout<<"\n";
+
+    VDinamico<Farmacia> vectorInorden = a1.recorreInorden();
+    for (int i = 0; i<100; i++) {
+        std::cout<<"Farmacia numero "<< i+1<<std::endl;
+        mostrarFarmacia(vectorInorden[i]);
+    }
 
     return 0;
 }

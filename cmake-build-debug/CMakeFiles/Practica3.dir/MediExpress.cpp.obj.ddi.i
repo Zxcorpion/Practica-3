@@ -64177,28 +64177,25 @@ int VDinamico<T>::busquedaBinaria(T &d) {
 # 4 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/AVL.h" 2
 
 
-
-template <typename N>
-class NodoA{
-public:
-    NodoA<N> *izq, *der;
-    N dato;
-    char bal = 0;
-    NodoA(): izq(0), der(0),dato(0),bal(0){}
-    NodoA(N &ele): izq(0), der(0), dato(ele),bal(0){}
-    NodoA(const N &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
+template<typename U>
+class NodoA {
+    public:
+    NodoA<U> *izq, *der;
+    U dato;
+    char bal;
+    NodoA(): izq(0), der(0), dato(0),bal(0) {}
+    NodoA(U &ele): izq(0), der(0),dato(ele),bal(0){}
+    NodoA(const U &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
 };
-
-
 template<typename A>
 class AVL {
-private:
     NodoA<A> *raiz;
-    unsigned int altura = 0, numEle = 0;
-
-    void preorden (NodoA<A> *p, int nivel);
-    void inorden (NodoA<A> *p, int nivel);
-    void postorden(NodoA<A> *p, int nivel);
+    unsigned int altura=0,numEle=0;
+    private:
+    void preorden (NodoA<A> *p, VDinamico<A> &aux);
+    void inorden (NodoA<A> *p, VDinamico<A> &aux);
+    void postorden (NodoA<A> *p, VDinamico<A> &aux);
+    NodoA<A> buscaClave(A &ele, NodoA<A> *p);
     int inserta(NodoA<A>* &n, A &dato);
     void rotDecha(NodoA<A>* &n);
     void rotIzqda(NodoA<A>* &n);
@@ -64208,22 +64205,31 @@ private:
     unsigned int numElem(NodoA<A>* &p,unsigned int& auxiliar);
     unsigned int altu(NodoA<A>* p);
     A* buscaIterativa(A &dato,NodoA<A>* p);
-
-public:
-    AVL(): raiz(0), numEle(0), altura(0){}
+   public:
+    AVL(): raiz(0), numEle(0),altura(0){}
     AVL(const AVL<A> &orig);
     virtual ~AVL();
-
+    bool buscar(A &ele, A &resultado);
     bool insertar (A &elem) {
-        bool resultado = inserta(raiz, elem);
-        if (resultado) {
+        bool resultado=inserta(raiz, elem);
+        if(resultado!=false) {
             numEle++;
         }
         return resultado;
     }
-    void recorrePreorden() { preorden(raiz,0); }
-    VDinamico<A*> recorreInorden(){inorden(raiz, 0);}
-    void recorrePostorden() { postorden(raiz,0); }
+    VDinamico<A> recorrePreorden(){
+        VDinamico<A> vector;
+        preorden(raiz, vector);
+        return vector;}
+    VDinamico<A> recorreInorden() {
+        VDinamico<A> vector;
+        inorden(raiz, vector);
+        return vector;
+    }
+    VDinamico<A> recorrePostorden(){
+        VDinamico<A> vector;
+        postorden(raiz, vector);
+        return vector;}
     AVL<A> &operator=(const AVL<A> &orig);
     A* buscaRec(A &dato){return buscaRecursiva(dato,raiz);}
     unsigned int numElementos() {
@@ -64231,42 +64237,36 @@ public:
         return numElem(raiz,aux);
     }
     unsigned int get_altura() {
-        altura = altu(raiz);
+        altura=altu(raiz);
         return altura;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
-template <typename A>
- void AVL<A>::preorden (NodoA<A> *p, int nivel){
+template <class A>
+ void AVL<A>::preorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
 
-        std::cout << "Procesando nodo "<< p->dato ;
-        std::cout << " en el nivel " << nivel << std::endl;
-
-        preorden (p->izq, nivel+1);
-        preorden (p->der, nivel+1);
+        aux.insertar(p->dato);
+        preorden (p->izq, aux);
+        preorden (p->der, aux);
     }
 }
 
-template <typename A>
- void AVL<A>::inorden (NodoA<A> *p, int nivel){
+template <class A>
+void AVL<A>::inorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
-        inorden (p->izq, nivel+1);
+        inorden (p->izq, aux);
+        aux.insertar (p->dato);
 
-        std::cout << "Procesando nodo " << p->dato;
-        std::cout << " en el nivel " << nivel << std::endl;
-
-        inorden (p->der, nivel+1);
+        inorden (p->der, aux);
     }
 }
-template <typename A>
-void AVL<A>::postorden (NodoA<A> *p, int nivel){
+template <class A>
+void AVL<A>::postorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
-        postorden (p->izq, nivel+1);
-        postorden (p->der, nivel+1);
-
-        std::cout << "Procesando nodo "<< p->dato;
-        std::cout << " en el nivel " << nivel << std::endl;
+        postorden (p->izq, aux);
+        postorden (p->der, aux);
+        aux.insertar(p->dato);
 
     }
 }
@@ -64294,7 +64294,25 @@ void AVL<A>::rotDecha(NodoA<A>* &p){
     l->bal--;
     if(q->bal < 0) l->bal -= -q->bal;
 }
-
+template<typename A>
+NodoA<A> AVL<A>::buscaClave(A &ele, NodoA<A> *p) {
+    if (!p)
+        return 0;
+    else if (ele < p->dato)
+        return buscaClave (ele, p->izq);
+    else if (ele > p-> dato)
+        return buscaClave (ele, p->der);
+    else return p;
+}
+template<typename A>
+bool AVL<A>::buscar(A &ele, A &resultado) {
+    NodoA<A> *p = buscaClave (ele, raiz);
+    if (p) {
+        resultado = p->dato;
+        return true;
+    }
+    return false;
+}
 template<typename A>
  int AVL<A>::inserta(NodoA<A>* &c, A &dato){
     NodoA<A> *p = c;
@@ -64321,7 +64339,6 @@ template<typename A>
             } } }
     return deltaH;
 }
-
 template<typename A>
 void AVL<A>::destruir(NodoA<A> *&p) {
     if (p != nullptr) {
@@ -64339,7 +64356,6 @@ NodoA<A>* AVL<A>::copiar(NodoA<A> *p) {
     if (!p) {
         return 0;
     }
-
         NodoA<A> *q = new NodoA<A>(p->dato);
         q->izq = copiar(p->izq);
         q->der = copiar(p->der);
@@ -64354,13 +64370,12 @@ numEle(orig.numEle)
     raiz = 0 ;
     raiz = copiar(orig.raiz);
 }
-
 template<typename A>
 AVL<A>::~AVL() {
-    destruir(raiz);
+    if(raiz!=nullptr) {
+        destruir(raiz);
+    }
 }
-
-
 template<typename A>
 AVL<A> &AVL<A>::operator=(const AVL<A> &orig) {
     if (this != &orig) {
@@ -64371,17 +64386,20 @@ AVL<A> &AVL<A>::operator=(const AVL<A> &orig) {
     }
     return *this;
 }
-
 template<typename A>
 A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
-
+    if(p==nullptr)
+        return nullptr;
     if(p->dato==dato) {
-        return p->dato;
+        return &p->dato;
     }else {
-        buscaRecursiva(dato, p->izq);
-        buscaRecursiva(dato, p->der);
+
+        A* encontrado = buscaRecursiva(dato, p->izq);
+        if (encontrado != nullptr)
+            return encontrado;
+
+        return buscaRecursiva(dato, p->der);
     }
-    return 0;
 }
 template<typename A>
 unsigned int AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
@@ -64400,8 +64418,8 @@ unsigned int AVL<A>::altu(NodoA<A> *p) {
     }
     if(p) {
 
-       unsigned int alt_izq = altu(p->izq);
-       unsigned int alt_der = altu(p->der);
+        unsigned int alt_izq = altu(p->izq);
+        unsigned int alt_der = altu(p->der);
         if (alt_der < alt_izq) {
             return 1+alt_izq;
         }else {
@@ -64409,12 +64427,13 @@ unsigned int AVL<A>::altu(NodoA<A> *p) {
         }
     }
 }
+
 template<typename A>
 A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
 
     while(p) {
         if(p->dato==dato) {
-            return p->dato;
+            return &dato;
         }else if(dato<p->dato) {
             p = p->izq;
         }else {
@@ -64866,17 +64885,7 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
 }
 # 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
-
-
-
-
-
-
-
-# 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 1
-# 9 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
-
-
+# 11 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
@@ -64913,7 +64922,7 @@ class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;
     ListaEnlazada<Laboratorio> labs;
-
+    AVL<Farmacia> pharmacy;
 public:
     MediExpress();
     MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias);
@@ -65104,7 +65113,65 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
     std::cout << "Medicamentos sin asignar: " << cont << std::endl;
 
 
+    std::string cif_ = "";
+    std::string provincia_= "";
+    std::string localidadLab_= "";
+    std::string nombre_= "";
+    std::string direccionLab_= "";
+    std::string codPostal_= "";
 
+    is.open(farmacias);
+    if ( is.good() ) {
+
+        clock_t t_ini = clock();
+
+        while ( getline(is, fila ) ) {
+
+
+            if (fila!="") {
+
+                columnas.str(fila);
+
+
+
+                getline(columnas, cif_, ';');
+                getline(columnas, provincia_,';');
+                getline(columnas, localidadLab_,';');
+                getline(columnas, nombre_,';');
+                getline(columnas, direccionLab_,';');
+                getline(columnas, codPostal_,';');
+
+
+                Farmacia farmacia_(cif_,provincia_,localidadLab_,nombre_, direccionLab_, codPostal_);
+                try {
+                    pharmacy.insertar(farmacia_);
+                }catch (std::out_of_range &e) {
+                    std::cerr<<e.what()<<std::endl;
+                }
+
+                fila="";
+                columnas.str(std::string());
+                columnas.clear();
+                columnas.str(fila);
+
+                std::cout << ++contador
+                          << " Farmacia: ( CIF = " << cif_
+                          << " Provincia = " << provincia_ << " Localidad = " << localidadLab_
+                          << " Nombre = " << nombre_ << " Direccion = " << direccionLab_ << " CodPostal = " << codPostal_
+                          << ")" << std::endl;
+            }
+        }
+
+        is.close();
+
+        std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
+# 215 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp" 3
+                                                                          1000
+# 215 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
+                                                                                        ) << " segs." << std::endl;
+    } else {
+        std::cout << "Error de apertura en archivo" << std::endl;
+    }
 }
 
 

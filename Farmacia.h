@@ -5,7 +5,7 @@
 #ifndef PRACTICA3_FARMACIA_H
 #define PRACTICA3_FARMACIA_H
 #include <iostream>
-#include "MediExpress.h"
+//#include "MediExpress.h"
 
 
 class Farmacia {
