@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 4.0)
-project(Practica3)
+project(Practica2)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Practica3 main.cpp
-Lista.h
-AVL.h
-VDinamico.h
+add_executable(Practica2 main.cpp
+        VDinamico.h
+        Lista.h
+        PaMedicamento.cpp
+        PaMedicamento.h
         Laboratorio.cpp
-        Farmacia.cpp
+        Laboratorio.h
         MediExpress.cpp
-        PaMedicamento.cpp)
+        MediExpress.h)

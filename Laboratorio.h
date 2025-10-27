@@ -1,8 +1,11 @@
+//
+// Created by pablo on 20/10/2025.
+//
 
-#ifndef PRACTICA3_LABORATORIO_H
-#define PRACTICA3_LABORATORIO_H
-
+#ifndef PRACTICA2_LABORATORIO_H
+#define PRACTICA2_LABORATORIO_H
 #include <iostream>
+
 
 class Laboratorio {
 private:
@@ -36,6 +39,4 @@ public:
     void setLocalidad(const std::string &localidad);
 };
 
-
-
-#endif //PRACTICA3_LABORATORIO_H
+#endif //PRACTICA2_LABORATORIO_H

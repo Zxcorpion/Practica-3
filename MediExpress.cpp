@@ -14,7 +14,7 @@ medication(),labs()
  * @param laboratorios pasador por referencia
  * @post Se crea un objeto de la clase MediExpress con los valores pasados por cabecera
  */
-MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias) {
+MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios) {
     std::ifstream is;
     std::stringstream  columnas;
     std::string fila;
@@ -23,6 +23,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
     std::string id_number_string = "";
     std::string id_alpha="";
     std::string nombre="";
+
 
 
     is.open(medicamentos); //carpeta de proyecto
@@ -159,63 +160,6 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
             cont++;
     }
     std::cout << "Medicamentos sin asignar: " << cont << std::endl;
-
-    //Leemos el tercer archivo
-    std::string cif_ = "";
-    std::string provincia_= "";
-    std::string localidadLab_= "";
-    std::string nombre_= "";
-    std::string direccionLab_= "";
-    std::string codPostal_= "";
-
-    is.open(farmacias); //carpeta de proyecto
-    if ( is.good() ) {
-
-        clock_t t_ini = clock();
-
-        while ( getline(is, fila ) ) {
-
-            //¿Se ha leído una nueva fila?
-            if (fila!="") {
-
-                columnas.str(fila);
-
-                //formato de fila: id_number;id_alpha;nombre;
-
-                getline(columnas, cif_, ';'); //leemos caracteres hasta encontrar y omitir ';'
-                getline(columnas, provincia_,';');
-                getline(columnas, localidadLab_,';');
-                getline(columnas, nombre_,';');
-                getline(columnas, direccionLab_,';');
-                getline(columnas, codPostal_,';');
-
-
-                Farmacia farmacia_(cif_,provincia_,localidadLab_,nombre_, direccionLab_, codPostal_);
-                try {
-                    pharmacy.insertar(farmacia_);
-                }catch (std::out_of_range &e) {
-                    std::cerr<<e.what()<<std::endl;
-                }
-
-                fila="";
-                columnas.str(std::string());
-                columnas.clear();
-                columnas.str(fila);
-
-                std::cout << ++contador
-                          << " Farmacia: ( CIF = " << cif_
-                          << " Provincia = " << provincia_ << " Localidad = " << localidadLab_
-                          << " Nombre = " << nombre_ << " Direccion = " << direccionLab_ << " CodPostal = " << codPostal_
-                          << ")" << std::endl;
-            }
-        }
-
-        is.close();
-
-        std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
-    } else {
-        std::cout << "Error de apertura en archivo" << std::endl;
-    }
 }
 
 /**
