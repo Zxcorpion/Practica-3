@@ -90,8 +90,9 @@ bool Farmacia::operator>(const Farmacia &orig) const {
     return cif_ > orig.cif_;
 }
 
+
 void Farmacia::pedidoMedicam(int ID) {
-    
+    linkMedi->suministrarFarmacia(*this, ID);
 }
 
 PaMedicamento Farmacia::buscaMedicam(int ID) {
@@ -101,7 +102,9 @@ PaMedicamento Farmacia::buscaMedicam(int ID) {
             return *dispense[i];
         }
     }
-    return 0;
+    if (medicam == 0) {
+        pedidoMedicam(ID);
+    }
 }
 
 

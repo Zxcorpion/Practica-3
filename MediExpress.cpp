@@ -389,4 +389,21 @@ void MediExpress::borrarLaboratorio(const std::string &nombreCiudad) {
     }
 }
 
-MediExpress::
+PaMedicamento *MediExpress::buscaCompuesto(const int ID_) {
+    PaMedicamento *auxiliar;
+    for(unsigned int i=0;i<medication.tamlog_();i++) {
+        if(medication[i].get_id_num() == ID_) {
+            return auxiliar;
+        }
+    }
+    return 0;
+}
+
+
+void MediExpress::suministrarFarmacia(Farmacia farma, int ID_) {
+    PaMedicamento *medicam = buscaCompuesto(ID_);
+    if (!medicam) {
+        return &medicam;
+    }
+    return 0;
+}
