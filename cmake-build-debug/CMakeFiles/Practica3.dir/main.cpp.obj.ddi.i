@@ -64232,7 +64232,7 @@ class AVL {
     }
     unsigned int get_altura() {
         altura=altu(raiz);
-        return altura;
+        return altura-1;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
@@ -64879,7 +64879,16 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
 }
 # 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
-# 11 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
+
+
+
+
+
+
+
+class MediExpres;
+
+
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
@@ -65182,5 +65191,9 @@ int main() {
         mostrarFarmacia(vectorInorden[i]);
     }
 
+
+
+    MediExpress medi("../pa_medicamentos.csv","../lab2.csv","../farmacias.csv");
+    std::cout<<medi.buscarLabCiudad("Madrid").tamlog_();
     return 0;
 }

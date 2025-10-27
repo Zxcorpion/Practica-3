@@ -64238,7 +64238,7 @@ class AVL {
     }
     unsigned int get_altura() {
         altura=altu(raiz);
-        return altura;
+        return altura-1;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
@@ -64885,7 +64885,16 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
 }
 # 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
-# 11 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
+
+
+
+
+
+
+
+class MediExpres;
+
+
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
@@ -65094,6 +65103,8 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
 
     ListaEnlazada<Laboratorio>::Iterador<Laboratorio> itLaboratorio = labs.iterador();
+
+
     int tam = 0;
 
     while (!itLaboratorio.fin() && tam +1 < medication.tamlog_()) {
@@ -65102,15 +65113,22 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
         tam+=2;
         itLaboratorio.siguiente();
     }
-    int cont=0;
-    for (int i=0; i<medication.tamlog_(); i++){
-        if (medication[i].getServe())
-            std::cout << "ID del PaMedicamento: " << medication[i].get_id_num()<<
-                ", ID del Laboratorio asociado: " << medication[i].getServe()->getId() << std::endl;
-        else
-            cont++;
+# 165 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
+    VDinamico<Laboratorio*> labsMadrid = this->buscarLabCiudad("Madrid");
+    VDinamico<PaMedicamento*> medSin = this->getMedicamentoSinLab();
+    std::cout << "Medicamentos sin asignar: " << medSin.tamlog_() << std::endl;
+
+    for (int i = 0; i < medSin.tamlog_(); i++) {
+        medSin[i]->servidoPor(labsMadrid[i]);
     }
-    std::cout << "Medicamentos sin asignar: " << cont << std::endl;
+    int cont2=0;
+    for (int i=0; i<medication.tamlog_(); i++) {
+        if (!medication[i].getServe()) {
+            cont2++;
+        }
+    }
+    std::cout<<cont2<<std::endl;
+
 
 
     std::string cif_ = "";
@@ -65165,9 +65183,9 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
         is.close();
 
         std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
-# 215 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp" 3
+# 233 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp" 3
                                                                           1000
-# 215 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
+# 233 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
                                                                                         ) << " segs." << std::endl;
     } else {
         std::cout << "Error de apertura en archivo" << std::endl;

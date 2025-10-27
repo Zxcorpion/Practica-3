@@ -64,7 +64,7 @@ class AVL {
     }
     unsigned int get_altura() {
         altura=altu(raiz);
-        return altura;
+        return altura-1;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };

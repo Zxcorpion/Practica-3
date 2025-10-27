@@ -1,10 +1,9 @@
 //
-// Created by pablo on 20/10/2025.
+// Created by admin on 21/10/2025.
 //
 
-#ifndef PRACTICA2_VDINAMICO_H
-#define PRACTICA2_VDINAMICO_H
-
+#ifndef PRACTICA3_VDINAMICO_H
+#define PRACTICA3_VDINAMICO_H
 #include <limits.h>
 #include <algorithm>
 #include <stdexcept>
@@ -274,4 +273,4 @@ int VDinamico<T>::busquedaBinaria(T &d) {
     return -1; //Si no se encuentra lanzo -1
 }
 
-#endif //PRACTICA2_VDINAMICO_H
+#endif //PRACTICA3_VDINAMICO_H

@@ -1,29 +1,31 @@
 //
-// Created by pablo on 20/10/2025.
+// Created by admin on 21/10/2025.
 //
 
-#ifndef PRACTICA2_MEDIEXPRESS_H
-#define PRACTICA2_MEDIEXPRESS_H
-
-
+#ifndef PRACTICA3_MEDIEXPRESS_H
+#define PRACTICA3_MEDIEXPRESS_H
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <ctime>
+
+#include "AVL.h"
 #include "PaMedicamento.h"
 #include "Laboratorio.h"
 #include "VDinamico.h"
 #include "Lista.h"
+#include "Farmacia.h"
 
 
 class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;
     ListaEnlazada<Laboratorio> labs;
+    AVL<Farmacia> pharmacy;
 public:
     MediExpress();
-    MediExpress(const std::string &medicamentos, const std::string &laboratorios);
+    MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias);
     MediExpress(const MediExpress &orig);
     ~MediExpress();
 
@@ -39,6 +41,10 @@ public:
     VDinamico<PaMedicamento*> buscaCompuesto(const std::string &nombrePA);
     VDinamico<PaMedicamento*> getMedicamentoSinLab();
     void borrarLaboratorio(const std::string &nombreCiudad);
+    PaMedicamento* buscaCompuesto(const int ID_);
+    void suministrarFarmacia(Farmacia farma, int ID_);
+    Farmacia* buscaFarmacia(const std::string &nombreFar);
+
 };
 
-#endif //PRACTICA2_MEDIEXPRESS_H
+#endif //PRACTICA3_MEDIEXPRESS_H

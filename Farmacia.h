@@ -5,14 +5,17 @@
 #ifndef PRACTICA3_FARMACIA_H
 #define PRACTICA3_FARMACIA_H
 #include <iostream>
-//#include "MediExpress.h"
+#include "PaMedicamento.h"
+#include "VDinamico.h"
+class MediExpress;
 
 
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
     nombre_="-",direccion_="-",codPostal_="-";
-    //MediExpress *linkMedi;
+    MediExpress* linkMedi;
+    VDinamico<PaMedicamento*> dispense;
 public:
     Farmacia(std::string cif="-",std::string provincia="-",std::string localidad="-",
     std::string nombre="-",std::string direccion="-",std::string codPostal="-");
@@ -31,6 +34,9 @@ public:
     void set_direccion(const std::string &direccion);
     std::string get_cod_postal() const;
     void set_cod_postal(const std::string &cod_postal);
+    PaMedicamento buscaMedicam(int ID);
+    void pedidoMedicam(int ID);
+    void dispensaMedicam(PaMedicamento pa);
 
     Farmacia &operator=(const Farmacia& orig);
     bool operator==(const Farmacia &orig) const;

@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica2
+# Install script for directory: C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Practica2")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Practica3")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,7 +40,7 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica2/cmake-build-debug/install_local_manifest.txt"
+  file(WRITE "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/cmake-build-debug/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
 if(CMAKE_INSTALL_COMPONENT)
@@ -56,6 +56,6 @@ else()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

@@ -1,5 +1,6 @@
 
 #include "Farmacia.h"
+#include "MediExpress.h"
 Farmacia::Farmacia(std::string cif,std::string provincia,std::string localidad,
     std::string nombre,std::string direccion,std::string codPostal):
 cif_(cif),
@@ -88,5 +89,22 @@ bool Farmacia::operator==(const Farmacia &orig) const{
 bool Farmacia::operator>(const Farmacia &orig) const {
     return cif_ > orig.cif_;
 }
+
+void Farmacia::pedidoMedicam(int ID) {
+    
+}
+
+PaMedicamento Farmacia::buscaMedicam(int ID) {
+    PaMedicamento *medicam;
+    for (int i = 0; i < dispense.tamlog_(); i++) {
+        if (ID == dispense[i]->get_id_num()) {
+            return *dispense[i];
+        }
+    }
+    return 0;
+}
+
+
+
 
 

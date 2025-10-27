@@ -1,9 +1,11 @@
 //
-// Created by pablo on 20/10/2025.
+// Created by admin on 21/10/2025.
 //
 
-#ifndef PRACTICA2_PAMEDICAMENTO_H
-#define PRACTICA2_PAMEDICAMENTO_H
+#ifndef PRACTICA3_PAMEDICAMENTO_H
+#define PRACTICA3_PAMEDICAMENTO_H
+
+
 #include <iostream>
 #include "Laboratorio.h"
 
@@ -38,4 +40,5 @@ public:
     bool operator==(const PaMedicamento &orig) const;
 };
 
-#endif //PRACTICA2_PAMEDICAMENTO_H
+
+#endif //PRACTICA3_PAMEDICAMENTO_H
