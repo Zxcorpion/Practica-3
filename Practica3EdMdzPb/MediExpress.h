@@ -13,19 +13,23 @@
 #include <string>
 #include <sstream>
 #include <ctime>
+
+#include "AVL.h"
 #include "PaMedicamento.h"
 #include "Laboratorio.h"
 #include "VDinamico.h"
 #include "Lista.h"
+#include "Farmacia.h"
 
 
 class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;
     ListaEnlazada<Laboratorio> labs;
+    AVL<Farmacia> pharmacy;
 public:
     MediExpress();
-    MediExpress(const std::string &medicamentos, const std::string &laboratorios);
+    MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias);
     MediExpress(const MediExpress &orig);
     ~MediExpress();
 
@@ -41,6 +45,10 @@ public:
     VDinamico<PaMedicamento*> buscaCompuesto(const std::string &nombrePA);
     VDinamico<PaMedicamento*> getMedicamentoSinLab();
     void borrarLaboratorio(const std::string &nombreCiudad);
+    PaMedicamento* buscaCompuesto(const int ID_);
+    void suministrarFarmacia(Farmacia farma, int ID_);
+    Farmacia* buscaFarmacia(const std::string &cif_,VDinamico<Farmacia> farmacias);
+
 };
 
 

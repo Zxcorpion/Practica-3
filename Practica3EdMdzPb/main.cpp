@@ -1,105 +1,234 @@
 #include <iostream>
-#include "Lista.h"
-#include "VDinamico.h"
-#include "Laboratorio.h"
+#include <sstream>
+#include <fstream>
 #include "MediExpress.h"
 #include "PaMedicamento.h"
+#include "Laboratorio.h"
+#include "VDinamico.h"
+#include "AVL.h"
+#include "Farmacia.h"
 
-void mostrarLista(ListaEnlazada<int> &l) {
-    ListaEnlazada<int>::Iterador<int> it = l.iterador();
-    while (!it.fin()) {
-        std::cout<<it.dato()<<std::endl;
-        it.siguiente();
+/**
+ * @brief Funcion que sirve para leer datos de un fichero e introducirlos en un arbol AVL
+ * @param fichero Fichero del que se quiere leer los datos
+ * @return Arbol AVL con los datos del fichero
+ * @post Un arbol AVL es creado con todos los datos de un fichero
+ */
+AVL<Farmacia> leeFicheroArbol(const std::string &fichero) {
+    std::ifstream is;
+    std::stringstream  columnas;
+    std::string fila;
+    int contador=0;
+
+    std::string cif_ = "";
+    std::string provincia_= "";
+    std::string localidad_= "";
+    std::string nombre_= "";
+    std::string direccion_= "";
+    std::string codPostal_= "";
+
+    AVL<Farmacia> arbolFarmacia;
+
+    is.open(fichero); //carpeta de proyecto
+    if ( is.good() ) {
+
+        clock_t t_ini = clock();
+
+        while ( getline(is, fila ) ) {
+
+            //¿Se ha leído una nueva fila?
+            if (fila!="") {
+
+                columnas.str(fila);
+
+                //formato de fila: id_number;id_alpha;nombre;
+
+                getline(columnas, cif_, ';'); //leemos caracteres hasta encontrar y omitir ';'
+                getline(columnas, provincia_,';');
+                getline(columnas, localidad_,';');
+                getline(columnas, nombre_,';');
+                getline(columnas, direccion_,';');
+                getline(columnas, codPostal_,';');
+
+                fila="";
+                columnas.clear();
+
+                Farmacia farmacia_(cif_,provincia_,localidad_,nombre_, direccion_, codPostal_);
+                try {
+                    arbolFarmacia.insertar(farmacia_);
+                }catch (std::out_of_range &e) {
+                    std::cerr<<e.what()<<std::endl;
+                }
+
+
+                std::cout << ++contador
+                          << " Farmacia: ( CIF = " << cif_
+                          << " Provincia = " << provincia_ << " Localidad = " << localidad_
+                          << " Nombre = " << nombre_ << " Direccion = " << direccion_ << " CodPostal = " << codPostal_
+                          << ")" << std::endl;
+            }
+        }
+
+        is.close();
+
+        std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    } else {
+        std::cout << "Error de apertura en archivo" << std::endl;
     }
+    return arbolFarmacia;
 }
 
 /**
- * @author Pablo Rodríguez Gniadek prg00054@red.ujaen.es
- * @author Marco Díaz Vera mdv00011@red.ujaen.es
+ * @brief Funcion que sirve para leer datos de un fichero e introducirlos en un vector dinamico
+ * @param fichero Fichero del que se quiere leer los datos
+ * @return Vector dinamico con los datos del fichero
+ * @post Un vector dinamico es creado con todos los datos de un fichero
  */
-int main() {
-    ListaEnlazada<int> listaEnteros;
-    for (int i = 101; i <= 200; i++){
-        listaEnteros.insertarFinal(i);
-    }
-    for (int i = 98; i>=1; i--) {
-        listaEnteros.insertarinicio(i);
-    }
+VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
+    std::ifstream is;
+    std::stringstream  columnas;
+    std::string fila;
+    int contador=0;
 
-    ListaEnlazada<int>::Iterador<int> it = listaEnteros.iterador();
-    while (!it.fin() && it.dato() != 101) {
-        it.siguiente();
-    }
-    int dato1=100;
-    int dato2=99;
+    std::string cif_ = "";
+    std::string provincia_="";
+    std::string localidad_="";
+    std::string nombre_="";
+    std::string direccion_="";
+    std::string codPostal_="";
 
-    if (!it.fin()) {
-        listaEnteros.insertar_delante(it,dato1);
-    }
-    it = listaEnteros.iterador(); //Reiniciamos el iterador ya que este apunta al nodo 101
-    while (!it.fin() && it.dato() != 98) {
-        it.siguiente();
-    }
-    if (!it.fin()) {
-        listaEnteros.insertarDetras(it,dato2);
-    }
+    VDinamico<Farmacia> vectorFarmacia;
 
-    mostrarLista(listaEnteros);
-    std::cout<<"\n";
-    std::cout<<"Borrado"<<std::endl;
-    std::cout<<"\n";
+    is.open(fichero); //carpeta de proyecto
+    if ( is.good() ) {
 
-    it = listaEnteros.iterador();
-    for (int i = 0; i < 10; i++) {
-        listaEnteros.borrarFinal();
-        listaEnteros.borrarInicio();
+        clock_t t_ini = clock();
+
+        while ( getline(is, fila ) ) {
+
+            //¿Se ha leído una nueva fila?
+            if (fila!="") {
+
+                columnas.str(fila);
+
+                //formato de fila: id_number;id_alpha;nombre;
+
+                getline(columnas, cif_, ';'); //leemos caracteres hasta encontrar y omitir ';'
+                getline(columnas, provincia_,';');
+                getline(columnas, localidad_,';');
+                getline(columnas, nombre_,';');
+                getline(columnas, direccion_,';');
+                getline(columnas, codPostal_,';');
+
+
+                Farmacia farmacia_(cif_,provincia_,localidad_,nombre_, direccion_, codPostal_);
+                try {
+                    vectorFarmacia.insertar(farmacia_);
+                }catch (std::out_of_range &e) {
+                    std::cerr<<e.what()<<std::endl;
+                }
+
+                fila="";
+                columnas.clear();
+
+                std::cout << ++contador
+                          << " Farmacia: ( CIF = " << cif_
+                          << " Provincia = " << provincia_ << " Localidad = " << localidad_
+                          << " Nombre = " << nombre_ << " Direccion = " << direccion_ << " CodPostal = " << codPostal_
+                          << ")" << std::endl;
+            }
+        }
+
+        is.close();
+
+        std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    } else {
+        std::cout << "Error de apertura en archivo" << std::endl;
     }
-    mostrarLista(listaEnteros);
+    return vectorFarmacia;
+}
 
-    it = listaEnteros.iterador();
-    while (!it.fin()) {
-        if (it.dato() % 10 == 0) {
-            listaEnteros.borrar(it);
-            it = listaEnteros.iterador(); //tenemos que resetear el iterador para que tenga los indices correctos
-        } else {
-            it.siguiente();
+
+void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,std::string cifs[],float &tiempo) {
+    clock_t t_ini = clock();
+    for(int i=0;i<500;i++) {
+        if(arbol.buscaRec(vectorFarmacias[i])->get_cif()!=cifs[i]) {
+            std::cout<<"No se encontro"<<std::endl;
         }
     }
-    mostrarLista(listaEnteros);
+    std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    tiempo=((clock() - t_ini) / (float) CLOCKS_PER_SEC);
+}
+void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[],float &tiempo) {
+    clock_t t_ini = clock();
+    for(int i=0;i<500;i++) {
+        if(vectorFarmacias[i].get_cif()!=cifs[i]) {
+            std::cout<<"No se encontro"<<std::endl;
+        }
+    }
+    std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    tiempo=((clock() - t_ini) / (float) CLOCKS_PER_SEC);
+}
 
-    //Parte 2
-    MediExpress mediexpress("../pa_medicamentos.csv","../lab2.csv");
-    VDinamico<Laboratorio *> labsGranada =mediexpress.buscarLabCiudad("Granada");
+void mostrarFarmacia(Farmacia &farma) {
+    std::cout<<"CIF = " << farma.get_cif()
+    << ", Provincia = " << farma.get_provincia()
+    << ", Localidad = " << farma.get_localidad()
+    << ", Nombre = " << farma.get_nombre()
+    << ", Direccion = " << farma.get_direccion()
+    << ", CodPostal = " << farma.get_cod_postal()
+    << std::endl;
+}
+
+/**
+ * @author Pablo Rodriguez Gniadek prg00054@red.ujaen.es
+ * @author Marco Diaz Vera mdv00011@red.ujaen.es
+ */
+int main() {
+    //Prueba 1
+    std::cout<<"Insercion de las farmacias en un arbol"<<std::endl;
+    AVL<Farmacia> a1 = leeFicheroArbol("../farmacias.csv");
     std::cout<<"\n";
-    std::cout<<"Laboratorios de Granada: "<<std::endl;
-    for (int i=0;i<labsGranada.tamlog_();i++) {
-        std::cout<<labsGranada[i]->getNomrbeLab()<<" "<<std::endl;
+    std::cout<<"Insercion de las farmacias en un vector dinamico"<<std::endl;
+    VDinamico<Farmacia> v1 = leeFicheroVector("../farmacias.csv");
+    std::cout<<"\n";
+
+    std::cout<<"Muestra por pantalla de las primeras 500 farmacias"<<std::endl;
+    std::string vectorCIFS[500];
+    for (int i=0; i<500; i++) {
+        vectorCIFS[i] = v1[i].get_cif();
+    }
+
+    std::cout<<"\n";
+    std::cout<<"Conteo del tiempo sobre el arbol y sobre el vector"<<std::endl;
+
+    float tiempo1=0, tiempo2=0;
+    calcularbusqueda(v1,a1,vectorCIFS,tiempo1);
+    busquedasegundotipo(v1,vectorCIFS,tiempo2);
+    if(tiempo1 > tiempo2) {
+        std::cout<<"Es mas eficiente buscar en AVL"<<std::endl;
+    }else {
+        if(tiempo2 > tiempo1) {
+            std::cout<<"Es mas eficiente buscar en un vector dinamico"<<std::endl;
+        }
+    }
+    if(tiempo1==tiempo2) {
+        std::cout<<"Igual de eficiente"<<std::endl;
     }
     std::cout<<"\n";
-    VDinamico<Laboratorio *> labsJaen =mediexpress.buscarLabCiudad("Jaén");
-    std::cout<<"En Jaen hay "<<labsJaen.tamlog_()<<" laboratorios"<<std::endl;
-    VDinamico<Laboratorio *> labsMadrid =mediexpress.buscarLabCiudad("Madrid");
-    std::cout<<"En Madrid hay "<<labsMadrid.tamlog_()<<" laboratorios y los 10 primeros son: "<<std::endl;
-    for (int i=0;i<10;i++) {
-        std::cout<<labsMadrid[i]->getNomrbeLab()<<" "<<std::endl;
-    }
+
+    std::cout<<"La altura del arbol de farmacias es de: "<<a1.get_altura();
     std::cout<<"\n";
-    VDinamico<PaMedicamento*> labsAceite= mediexpress.buscaCompuesto("ACEITE");
-    std::cout<<"Los laboratorios cuyos principios activos poseen aceite son: "<<std::endl;
-    for (int i = 0; i < labsAceite.tamlog_(); i++) {
-        std::cout<<labsAceite[i]->getServe()->getNomrbeLab()<<" que tiene : "<<labsAceite[i]->get_nombre()<<std::endl;
+
+    VDinamico<Farmacia> vectorInorden = a1.recorreInorden();
+    for (int i = 0; i<100; i++) {
+        std::cout<<"Farmacia numero "<< i+1<<std::endl;
+        mostrarFarmacia(vectorInorden[i]);
     }
-    VDinamico<PaMedicamento*> labsSin = mediexpress.getMedicamentoSinLab();
-    for (int i = 0; i < labsSin.tamlog_(); i++) {
-        labsSin[i]->servidoPor(labsMadrid[i]);
-    }
-    try {
-        mediexpress.borrarLaboratorio("Bruselas");
-    }catch (std::invalid_argument& e) {
-        std::cerr<<e.what()<<std::endl;
-    }
-    VDinamico<Laboratorio*> labsBruselas=mediexpress.buscarLabCiudad("Bruselas");
-        std::cout<<"En Bruselas hay: "<<labsBruselas.tamlog_()<<" Laboratorios."<<std::endl;
+
+    //Prueba 2
+
+    MediExpress medi("../pa_medicamentos.csv","../lab2.csv","../farmacias.csv");
 
     return 0;
 }

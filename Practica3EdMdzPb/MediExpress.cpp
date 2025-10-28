@@ -1,7 +1,6 @@
 //
 // Created by marco on 22/10/2025.
 //
-
 #include "MediExpress.h"
 
 /**
@@ -9,7 +8,7 @@
  * @post Se crea un objeto con los valores asignados por defecto
  */
 MediExpress::MediExpress():
-medication(),labs()
+medication(),labs(),pharmacy()
 {}
 
 /**
@@ -18,7 +17,7 @@ medication(),labs()
  * @param laboratorios pasador por referencia
  * @post Se crea un objeto de la clase MediExpress con los valores pasados por cabecera
  */
-MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios) {
+MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias) {
     std::ifstream is;
     std::stringstream  columnas;
     std::string fila;
@@ -27,7 +26,6 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
     std::string id_number_string = "";
     std::string id_alpha="";
     std::string nombre="";
-
 
 
     is.open(medicamentos); //carpeta de proyecto
@@ -147,6 +145,8 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
     //Insertar
     ListaEnlazada<Laboratorio>::Iterador<Laboratorio> itLaboratorio = labs.iterador();
+
+
     int tam = 0;
 
     while (!itLaboratorio.fin() && tam +1 < medication.tamlog_()) {
@@ -155,15 +155,89 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
         tam+=2;
         itLaboratorio.siguiente();
     }
-    int cont=0;
-    for (int i=0; i<medication.tamlog_(); i++){
-        if (medication[i].getServe())
+    //int cont=0;
+    /*for (int i=0; i<medication.tamlog_(); i++){
+        if (medication[i].getServe()) {
             std::cout << "ID del PaMedicamento: " << medication[i].get_id_num()<<
                 ", ID del Laboratorio asociado: " << medication[i].getServe()->getId() << std::endl;
-        else
+        }else{
             cont++;
+        }
     }
-    std::cout << "Medicamentos sin asignar: " << cont << std::endl;
+    */ //La comprobacion sobra ya que el tamaño logico de sinLabs es el contador
+    VDinamico<Laboratorio*> labsMadrid = this->buscarLabCiudad("Madrid");
+    VDinamico<PaMedicamento*> medSin = this->getMedicamentoSinLab();
+    std::cout << "Medicamentos sin asignar: " << medSin.tamlog_() << std::endl;
+
+    for (int i = 0; i < medSin.tamlog_(); i++) {
+        medSin[i]->servidoPor(labsMadrid[i]);
+    }/*
+    int cont2=0;
+    for (int i=0; i<medication.tamlog_(); i++) {
+        if (!medication[i].getServe()) {
+            cont2++;
+        }
+    }
+    std::cout<<cont2<<std::endl;
+    */ //Comprobacion de que no hay ninguno sin asignar ahora
+
+
+    //Leemos el tercer archivo
+    std::string cif_ = "";
+    std::string provincia_= "";
+    std::string localidadLab_= "";
+    std::string nombre_= "";
+    std::string direccionLab_= "";
+    std::string codPostal_= "";
+
+    is.open(farmacias); //carpeta de proyecto
+    if ( is.good() ) {
+
+        clock_t t_ini = clock();
+
+        while ( getline(is, fila ) ) {
+
+            //¿Se ha leído una nueva fila?
+            if (fila!="") {
+
+                columnas.str(fila);
+
+                //formato de fila: id_number;id_alpha;nombre;
+
+                getline(columnas, cif_, ';'); //leemos caracteres hasta encontrar y omitir ';'
+                getline(columnas, provincia_,';');
+                getline(columnas, localidadLab_,';');
+                getline(columnas, nombre_,';');
+                getline(columnas, direccionLab_,';');
+                getline(columnas, codPostal_,';');
+
+
+                Farmacia farmacia_(cif_,provincia_,localidadLab_,nombre_, direccionLab_, codPostal_);
+                try {
+                    pharmacy.insertar(farmacia_);
+                }catch (std::out_of_range &e) {
+                    std::cerr<<e.what()<<std::endl;
+                }
+
+                fila="";
+                columnas.str(std::string());
+                columnas.clear();
+                columnas.str(fila);
+
+                std::cout << ++contador
+                          << " Farmacia: ( CIF = " << cif_
+                          << " Provincia = " << provincia_ << " Localidad = " << localidadLab_
+                          << " Nombre = " << nombre_ << " Direccion = " << direccionLab_ << " CodPostal = " << codPostal_
+                          << ")" << std::endl;
+            }
+        }
+
+        is.close();
+
+        std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    } else {
+        std::cout << "Error de apertura en archivo" << std::endl;
+    }
 }
 
 /**
@@ -317,3 +391,34 @@ void MediExpress::borrarLaboratorio(const std::string &nombreCiudad) {
             encontrado.siguiente();
     }
 }
+
+PaMedicamento *MediExpress::buscaCompuesto(const int ID_) {
+    PaMedicamento *auxiliar;
+    for(unsigned int i=0;i<medication.tamlog_();i++) {
+        if(medication[i].get_id_num() == ID_) {
+            return auxiliar;
+        }
+    }
+    return 0;
+}
+
+
+void MediExpress::suministrarFarmacia(Farmacia farma, int ID_) {
+    PaMedicamento *medicam = buscaCompuesto(ID_);
+    if (medicam) {
+        farma.dispensaMedicam(*medicam);
+    }else {
+        throw std::invalid_argument("Error al suministrar farmacia:Medicamento no encontrado");
+    }
+}
+Farmacia *MediExpress::buscaFarmacia(const std::string &cif_,VDinamico<Farmacia> farmacias) {
+    Farmacia *auxiliar=nullptr;
+    for(unsigned int i=0;i<farmacias.tamlog_();i++) {
+        if(pharmacy.buscaRec(farmacias[i])->get_cif()==cif_) {
+            auxiliar=&farmacias[i];
+            return auxiliar;
+        }
+    }
+    return auxiliar;
+}
+

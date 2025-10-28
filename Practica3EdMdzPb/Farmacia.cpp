@@ -1,8 +1,8 @@
 //
 // Created by marco on 23/10/2025.
 //
-
 #include "Farmacia.h"
+#include "MediExpress.h"
 Farmacia::Farmacia(std::string cif,std::string provincia,std::string localidad,
     std::string nombre,std::string direccion,std::string codPostal):
 cif_(cif),
@@ -10,12 +10,13 @@ provincia_(provincia),
 localidad_(localidad),
 nombre_(nombre),
 direccion_(direccion),
-codPostal_(codPostal)
-{}
+codPostal_(codPostal) {
+    
+}
 
 Farmacia::Farmacia(const Farmacia &orig):
 cif_(orig.cif_),
-provincia_(provincia_),
+provincia_(orig.provincia_),
 localidad_(orig.localidad_),
 nombre_(orig.nombre_),
 direccion_(orig.direccion_),
@@ -81,5 +82,34 @@ Farmacia &Farmacia::operator=(const Farmacia &orig) {
         codPostal_=orig.codPostal_;
     }
     return *this;
+}
+bool Farmacia::operator<(const Farmacia &orig) const{
+    return cif_ < orig.cif_;
+}
+bool Farmacia::operator==(const Farmacia &orig) const{
+    return cif_ == orig.cif_;
+}
+bool Farmacia::operator>(const Farmacia &orig) const {
+    return cif_ > orig.cif_;
+}
+
+
+void Farmacia::pedidoMedicam(const int ID) {
+    linkMedi->suministrarFarmacia(*this, ID);
+}
+
+PaMedicamento* Farmacia::buscaMedicam(const int &ID) {
+    for (int i = 0; i < dispense.tamlog_(); i++) {
+        if (ID == dispense[i]->get_id_num()) {
+            return dispense[i];
+        }
+    }
+    return 0;
+}
+void Farmacia::dispensaMedicam(PaMedicamento pa) {
+    if(pa.get_id_num()==0) {
+        throw std::invalid_argument("Error en dispensar:Medicamento invalido");
+    }
+    dispense.insertar(&pa,dispense.tamlog_());
 }
 

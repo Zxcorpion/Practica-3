@@ -6,7 +6,6 @@
 #define LABORATORIO_H
 #include <iostream>
 
-
 class Laboratorio {
 private:
     int id = 0;
