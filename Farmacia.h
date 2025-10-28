@@ -1,9 +1,9 @@
 //
-// Created by admin on 21/10/2025.
+// Created by marco on 23/10/2025.
 //
 
-#ifndef PRACTICA3_FARMACIA_H
-#define PRACTICA3_FARMACIA_H
+#ifndef FARMACIA_H
+#define FARMACIA_H
 #include <iostream>
 #include "PaMedicamento.h"
 #include "VDinamico.h"
@@ -34,8 +34,8 @@ public:
     void set_direccion(const std::string &direccion);
     std::string get_cod_postal() const;
     void set_cod_postal(const std::string &cod_postal);
-    PaMedicamento buscaMedicam(int ID);
-    void pedidoMedicam(int ID);
+    PaMedicamento* buscaMedicam(const int &ID);
+    void pedidoMedicam(const int ID);
     void dispensaMedicam(PaMedicamento pa);
 
     Farmacia &operator=(const Farmacia& orig);
@@ -45,4 +45,6 @@ public:
 };
 
 
-#endif //PRACTICA3_FARMACIA_H
+
+
+#endif //FARMACIA_H

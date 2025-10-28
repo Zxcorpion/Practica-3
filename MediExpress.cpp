@@ -1,3 +1,6 @@
+//
+// Created by marco on 22/10/2025.
+//
 #include "MediExpress.h"
 
 /**
@@ -5,7 +8,7 @@
  * @post Se crea un objeto con los valores asignados por defecto
  */
 MediExpress::MediExpress():
-medication(),labs()
+medication(),labs(),pharmacy()
 {}
 
 /**
@@ -402,8 +405,20 @@ PaMedicamento *MediExpress::buscaCompuesto(const int ID_) {
 
 void MediExpress::suministrarFarmacia(Farmacia farma, int ID_) {
     PaMedicamento *medicam = buscaCompuesto(ID_);
-    if (!medicam) {
-        return &medicam;
+    if (medicam) {
+        farma.dispensaMedicam(*medicam);
+    }else {
+        throw std::invalid_argument("Error al suministrar farmacia:Medicamento no encontrado");
     }
-    return 0;
 }
+Farmacia *MediExpress::buscaFarmacia(const std::string &cif_,VDinamico<Farmacia> farmacias) {
+    Farmacia *auxiliar=nullptr;
+    for(unsigned int i=0;i<farmacias.tamlog_();i++) {
+        if(pharmacy.buscaRec(farmacias[i])->get_cif()==cif_) {
+            auxiliar=&farmacias[i];
+            return auxiliar;
+        }
+    }
+    return auxiliar;
+}
+

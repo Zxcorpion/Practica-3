@@ -1,5 +1,9 @@
-#ifndef PRACTICA3_AVL_H
-#define PRACTICA3_AVL_H
+//
+// Created by marco on 22/10/2025.
+//
+
+#ifndef AVL_H
+#define AVL_H
 #include "VDinamico.h"
 #include <iostream>
 //Hay que saber cuantos nodos tiene un arbol usando un contador
@@ -63,8 +67,8 @@ class AVL {
         return numElem(raiz,aux);
     }
     unsigned int get_altura() {
-        altura=altu(raiz);
-        return altura-1;
+        altura=altu(raiz)-1;
+        return altura;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
@@ -272,4 +276,13 @@ A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
 
 
 
-#endif //PRACTICA3_AVL_H
+
+
+
+
+
+
+
+
+
+#endif //AVL_H

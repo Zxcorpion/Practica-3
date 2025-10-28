@@ -1,4 +1,6 @@
-
+//
+// Created by marco on 23/10/2025.
+//
 #include "Farmacia.h"
 #include "MediExpress.h"
 Farmacia::Farmacia(std::string cif,std::string provincia,std::string localidad,
@@ -8,8 +10,9 @@ provincia_(provincia),
 localidad_(localidad),
 nombre_(nombre),
 direccion_(direccion),
-codPostal_(codPostal)
-{}
+codPostal_(codPostal) {
+    
+}
 
 Farmacia::Farmacia(const Farmacia &orig):
 cif_(orig.cif_),
@@ -91,23 +94,22 @@ bool Farmacia::operator>(const Farmacia &orig) const {
 }
 
 
-void Farmacia::pedidoMedicam(int ID) {
+void Farmacia::pedidoMedicam(const int ID) {
     linkMedi->suministrarFarmacia(*this, ID);
 }
 
-PaMedicamento Farmacia::buscaMedicam(int ID) {
-    PaMedicamento *medicam;
+PaMedicamento* Farmacia::buscaMedicam(const int &ID) {
     for (int i = 0; i < dispense.tamlog_(); i++) {
         if (ID == dispense[i]->get_id_num()) {
-            return *dispense[i];
+            return dispense[i];
         }
     }
-    if (medicam == 0) {
-        pedidoMedicam(ID);
-    }
+    return 0;
 }
-
-
-
-
+void Farmacia::dispensaMedicam(PaMedicamento pa) {
+    if(pa.get_id_num()==0) {
+        throw std::invalid_argument("Error en dispensar:Medicamento invalido");
+    }
+    dispense.insertar(&pa,dispense.tamlog_());
+}
 

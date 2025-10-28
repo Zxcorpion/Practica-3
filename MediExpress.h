@@ -1,9 +1,13 @@
 //
-// Created by admin on 21/10/2025.
+// Created by marco on 22/10/2025.
 //
 
-#ifndef PRACTICA3_MEDIEXPRESS_H
-#define PRACTICA3_MEDIEXPRESS_H
+#ifndef MEDIEXPRESS_H
+#define MEDIEXPRESS_H
+
+
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -43,8 +47,12 @@ public:
     void borrarLaboratorio(const std::string &nombreCiudad);
     PaMedicamento* buscaCompuesto(const int ID_);
     void suministrarFarmacia(Farmacia farma, int ID_);
-    Farmacia* buscaFarmacia(const std::string &nombreFar);
+    Farmacia* buscaFarmacia(const std::string &cif_,VDinamico<Farmacia> farmacias);
 
 };
 
-#endif //PRACTICA3_MEDIEXPRESS_H
+
+
+
+
+#endif //MEDIEXPRESS_H

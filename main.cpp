@@ -152,14 +152,8 @@ VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
 void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,std::string cifs[],float &tiempo) {
     clock_t t_ini = clock();
     for(int i=0;i<500;i++) {
-        if(arbol.buscaRec(vectorFarmacias[i])==nullptr) {
+        if(arbol.buscaRec(vectorFarmacias[i])->get_cif()!=cifs[i]) {
             std::cout<<"No se encontro"<<std::endl;
-        }else {
-            if(arbol.buscaRec(vectorFarmacias[i])->get_cif()!=cifs[i]){
-                std::cout<<"CIF no encontrado"<<std::endl;
-            }else {
-                std::cout<<cifs[i]<<std::endl;
-            }
         }
     }
     std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
@@ -170,8 +164,6 @@ void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[]
     for(int i=0;i<500;i++) {
         if(vectorFarmacias[i].get_cif()!=cifs[i]) {
             std::cout<<"No se encontro"<<std::endl;
-        }else {
-            std::cout<<cifs[i]<<std::endl;
         }
     }
     std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
