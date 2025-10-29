@@ -1,9 +1,7 @@
-//
-// Created by marco on 22/10/2025.
-//
 
-#ifndef LABORATORIO_H
-#define LABORATORIO_H
+#ifndef PRACTICA3_LABORATORIO_H
+#define PRACTICA3_LABORATORIO_H
+
 #include <iostream>
 
 class Laboratorio {
@@ -22,21 +20,15 @@ public:
     void setId(int id);
 
     const std::string &getNomrbeLab() const;
-
     void setNomrbeLab(const std::string &nomrbeLab);
-
     const std::string &getDireccion() const;
-
     void setDireccion(const std::string &direccion);
-
     const std::string &getCodiPostal() const;
-
     void setCodiPostal(const std::string &codiPostal);
-
     const std::string &getLocalidad() const;
-
     void setLocalidad(const std::string &localidad);
 };
 
 
-#endif //LABORATORIO_H
+
+#endif //PRACTICA3_LABORATORIO_H

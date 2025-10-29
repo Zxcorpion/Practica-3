@@ -1,9 +1,6 @@
-//
-// Created by marco on 22/10/2025.
-//
 
-#ifndef LISTA_H
-#define LISTA_H
+#ifndef PRACTICA3_LISTA_H
+#define PRACTICA3_LISTA_H
 #include <stdexcept>
 
 /**
@@ -425,4 +422,7 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
     }
     return this;
 }
-#endif //LISTA_H
+
+
+
+#endif //PRACTICA3_LISTA_H

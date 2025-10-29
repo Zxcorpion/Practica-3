@@ -152,7 +152,7 @@ VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
 void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,std::string cifs[],float &tiempo) {
     clock_t t_ini = clock();
     for(int i=0;i<500;i++) {
-        if(arbol.buscaRec(vectorFarmacias[i])->get_cif()!=cifs[i]) {
+        if(arbol.buscaRec(vectorFarmacias[i])->get_cif() != cifs[i]) {
             std::cout<<"No se encontro"<<std::endl;
         }
     }
@@ -187,24 +187,24 @@ void mostrarFarmacia(Farmacia &farma) {
 int main() {
     //Prueba 1
     std::cout<<"Insercion de las farmacias en un arbol"<<std::endl;
-    AVL<Farmacia> a1 = leeFicheroArbol("../farmacias.csv");
+    AVL<Farmacia> arbol1 = leeFicheroArbol("../farmacias.csv");
     std::cout<<"\n";
     std::cout<<"Insercion de las farmacias en un vector dinamico"<<std::endl;
-    VDinamico<Farmacia> v1 = leeFicheroVector("../farmacias.csv");
+    VDinamico<Farmacia> vector1 = leeFicheroVector("../farmacias.csv");
     std::cout<<"\n";
 
     std::cout<<"Muestra por pantalla de las primeras 500 farmacias"<<std::endl;
     std::string vectorCIFS[500];
     for (int i=0; i<500; i++) {
-        vectorCIFS[i] = v1[i].get_cif();
+        vectorCIFS[i] = vector1[i].get_cif();
     }
 
     std::cout<<"\n";
     std::cout<<"Conteo del tiempo sobre el arbol y sobre el vector"<<std::endl;
 
     float tiempo1=0, tiempo2=0;
-    calcularbusqueda(v1,a1,vectorCIFS,tiempo1);
-    busquedasegundotipo(v1,vectorCIFS,tiempo2);
+    calcularbusqueda(vector1,arbol1,vectorCIFS,tiempo1);
+    busquedasegundotipo(vector1,vectorCIFS,tiempo2);
     if(tiempo1 > tiempo2) {
         std::cout<<"Es mas eficiente buscar en AVL"<<std::endl;
     }else {
@@ -217,10 +217,10 @@ int main() {
     }
     std::cout<<"\n";
 
-    std::cout<<"La altura del arbol de farmacias es de: "<<a1.get_altura();
+    std::cout<<"La altura del arbol de farmacias es de: "<<arbol1.get_altura();
     std::cout<<"\n";
 
-    VDinamico<Farmacia> vectorInorden = a1.recorreInorden();
+    VDinamico<Farmacia> vectorInorden = arbol1.recorreInorden();
     for (int i = 0; i<100; i++) {
         std::cout<<"Farmacia numero "<< i+1<<std::endl;
         mostrarFarmacia(vectorInorden[i]);
@@ -229,6 +229,41 @@ int main() {
     //Prueba 2
 
     MediExpress medi("../pa_medicamentos.csv","../lab2.csv","../farmacias.csv");
+    std::string cif[27] = {
+        "37656422V","46316032N", "77092934Q", "33961602D", "B62351861",
+        "B62351861","B65828113", "46138599R", "35069965W", "37579913Y",
+        "37682300C","37643742X", "46112335A", "47980171D", "38116138D",
+        "46315600V","37640233C", "37931842N", "33964303L", "35022080A",
+        "B66046640","E66748344", "47640201W", "B66621954", "46121385Z","X6806622W","46046390E"};
+
+
+    int id=3640;
+    for (int i = 0; i<27; i++) {
+        Farmacia *farmaOxido = medi.buscaFarmacia(cif[i]);//Cogemos una farmacia
+        PaMedicamento *medicam = farmaOxido->buscaMedicam(id);//Nos guiamos con el id
+
+        if (!medicam) {
+            std::cout<<"Los datos de la farmacia que contiene magnesio son: "<<std::endl;
+            mostrarFarmacia(*farmaOxido);
+        }else {
+            farmaOxido->pedidoMedicam(id);
+        }
+    }
+    VDinamico<PaMedicamento*> medicamentosOxido= medi.buscaCompuesto("MAGNESIO");
+    ListaEnlazada<Laboratorio*> labsOxido;
+    for (int i = 0; i<medicamentosOxido.tamlog_(); i++) {
+        if (medicamentosOxido[i]->getServe()) {
+            Laboratorio *auxilio = medicamentosOxido[i]->getServe();
+            labsOxido.insertarFinal(auxilio);
+        }
+    }
+
+    ListaEnlazada<Laboratorio*> labsVirus;
+    for (int i = 0; i<27; i++) {
+        Farmacia *farmasVirus = medi.buscaFarmacia(vectorCIFS[i]);
+    }
+    //labsVirus =
+
 
     return 0;
 }

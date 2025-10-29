@@ -1,18 +1,16 @@
-//
-// Created by marco on 23/10/2025.
-//
+
 #include "Farmacia.h"
 #include "MediExpress.h"
 Farmacia::Farmacia(std::string cif,std::string provincia,std::string localidad,
-    std::string nombre,std::string direccion,std::string codPostal):
+    std::string nombre,std::string direccion,std::string codPostal, MediExpress* link):
 cif_(cif),
 provincia_(provincia),
 localidad_(localidad),
 nombre_(nombre),
 direccion_(direccion),
-codPostal_(codPostal) {
-    
-}
+codPostal_(codPostal),
+linkMedi(link)
+{}
 
 Farmacia::Farmacia(const Farmacia &orig):
 cif_(orig.cif_),
@@ -20,10 +18,13 @@ provincia_(orig.provincia_),
 localidad_(orig.localidad_),
 nombre_(orig.nombre_),
 direccion_(orig.direccion_),
-codPostal_(orig.codPostal_)
+codPostal_(orig.codPostal_),
+linkMedi(orig.linkMedi)
 {}
 
-Farmacia::~Farmacia() {}
+Farmacia::~Farmacia() {
+    linkMedi = 0;
+}
 
 std::string Farmacia::get_cif() const {
     return cif_;
@@ -94,8 +95,8 @@ bool Farmacia::operator>(const Farmacia &orig) const {
 }
 
 
-void Farmacia::pedidoMedicam(const int ID) {
-    linkMedi->suministrarFarmacia(*this, ID);
+void Farmacia::pedidoMedicam(const int &ID) {
+    linkMedi->suministrarFarmacia(this, ID);
 }
 
 PaMedicamento* Farmacia::buscaMedicam(const int &ID) {
@@ -104,12 +105,31 @@ PaMedicamento* Farmacia::buscaMedicam(const int &ID) {
             return dispense[i];
         }
     }
+    //     pedidoMedicam(ID);
+    //
     return 0;
 }
-void Farmacia::dispensaMedicam(PaMedicamento pa) {
-    if(pa.get_id_num()==0) {
-        throw std::invalid_argument("Error en dispensar:Medicamento invalido");
+
+void Farmacia::dispensaMedicam(PaMedicamento *pa) {
+    if (pa->get_id_num() == 0) {
+        throw std::invalid_argument("Error en dispensa:medicamento invalido");
     }
-    dispense.insertar(&pa,dispense.tamlog_());
+        dispense.insertar(pa);
 }
+
+ListaEnlazada<Laboratorio *> Farmacia::buscarLabCompuesto(const std::string &nombre_PAmed) {
+    ListaEnlazada<Laboratorio*> listaWayne;
+    for (int i = 0;i < this->dispense.tamlog_();i++) {
+        PaMedicamento *med = dispense[i];
+        if (med && med->get_nombre().find(nombre_PAmed) != std::string::npos) {
+            Laboratorio *aux = med->getServe();
+            if (aux)
+            listaWayne.insertarFinal(aux);
+        }
+    }
+    return listaWayne;
+}
+
+
+
 

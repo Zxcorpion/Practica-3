@@ -64196,7 +64196,7 @@ class AVL {
     void destruir(NodoA<A> *&p);
     NodoA<A>* copiar(NodoA<A> *p);
     A* buscaRecursiva(A &dato,NodoA<A>* &p);
-    unsigned int numElem(NodoA<A>* &p,unsigned int& auxiliar);
+    void numElem(NodoA<A>* &p,unsigned int& auxiliar);
     unsigned int altu(NodoA<A>* p);
     A* buscaIterativa(A &dato,NodoA<A>* p);
    public:
@@ -64205,12 +64205,13 @@ class AVL {
     virtual ~AVL();
     bool buscar(A &ele, A &resultado);
     bool insertar (A &elem) {
-        bool resultado=inserta(raiz, elem);
-        if(resultado!=false) {
-            numEle++;
-        }
-        return resultado;
+        if (buscaRec(elem))
+            return false;
+        inserta(raiz, elem);
+        numEle++;
+        return true;
     }
+
     VDinamico<A> recorrePreorden(){
         VDinamico<A> vector;
         preorden(raiz, vector);
@@ -64227,12 +64228,14 @@ class AVL {
     AVL<A> &operator=(const AVL<A> &orig);
     A* buscaRec(A &dato){return buscaRecursiva(dato,raiz);}
     unsigned int numElementos() {
-        int aux=0;
-        return numElem(raiz,aux);
+        unsigned int aux=0;
+        numElem(raiz,aux);
+        this->numEle = aux;
+        return aux;
     }
     unsigned int get_altura() {
-        altura=altu(raiz);
-        return altura-1;
+        altura=altu(raiz) - 1;
+        return altura;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
@@ -64396,20 +64399,19 @@ A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
     }
 }
 template<typename A>
-unsigned int AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
+void AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
     if (p) {
         auxiliar++;
-        numElem(p->izq);
-        numElem(p->der);
+        numElem(p->izq,auxiliar);
+        numElem(p->der,auxiliar);
     }
-    numEle=auxiliar;
-    return auxiliar;
 }
 template<typename A>
 unsigned int AVL<A>::altu(NodoA<A> *p) {
     if(p==nullptr){
         return 0;
     }
+
     if(p) {
 
         unsigned int alt_izq = altu(p->izq);
@@ -64463,19 +64465,12 @@ public:
     void setId(int id);
 
     const std::string &getNomrbeLab() const;
-
     void setNomrbeLab(const std::string &nomrbeLab);
-
     const std::string &getDireccion() const;
-
     void setDireccion(const std::string &direccion);
-
     const std::string &getCodiPostal() const;
-
     void setCodiPostal(const std::string &codiPostal);
-
     const std::string &getLocalidad() const;
-
     void setLocalidad(const std::string &localidad);
 };
 # 11 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/PaMedicamento.h" 2
@@ -64879,24 +64874,19 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
 }
 # 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
-
-
-
-
-
-
-
-class MediExpres;
+# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
+class MediExpress;
 
 
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
     nombre_="-",direccion_="-",codPostal_="-";
-
+    MediExpress* linkMedi;
+    VDinamico<PaMedicamento*> dispense;
 public:
     Farmacia(std::string cif="-",std::string provincia="-",std::string localidad="-",
-    std::string nombre="-",std::string direccion="-",std::string codPostal="-");
+    std::string nombre="-",std::string direccion="-",std::string codPostal="-", MediExpress *link=0);
     Farmacia(const Farmacia &orig);
     virtual ~Farmacia();
 
@@ -64912,6 +64902,9 @@ public:
     void set_direccion(const std::string &direccion);
     std::string get_cod_postal() const;
     void set_cod_postal(const std::string &cod_postal);
+    PaMedicamento *buscaMedicam(const int &ID);
+    void pedidoMedicam(const int &ID);
+    void dispensaMedicam(PaMedicamento *pa);
 
     Farmacia &operator=(const Farmacia& orig);
     bool operator==(const Farmacia &orig) const;
@@ -64940,10 +64933,15 @@ public:
 
     void suministrarMed(PaMedicamento *pa,Laboratorio *l);
     Laboratorio *buscarLab(const std::string &nombreLab);
+    ListaEnlazada<Laboratorio*> buscarLabs(const std::string &nombrePA);
     VDinamico<Laboratorio*> buscarLabCiudad(const std::string &nombreCiudad);
     VDinamico<PaMedicamento*> buscaCompuesto(const std::string &nombrePA);
     VDinamico<PaMedicamento*> getMedicamentoSinLab();
     void borrarLaboratorio(const std::string &nombreCiudad);
+    PaMedicamento* buscaCompuesto(const int &ID_);
+    void suministrarFarmacia(Farmacia *farma, int ID_);
+    Farmacia* buscaFarmacia(const std::string &nombreFar);
+
 };
 # 5 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 2
 # 17 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
@@ -65093,25 +65091,19 @@ VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
 void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,std::string cifs[],float &tiempo) {
     clock_t t_ini = clock();
     for(int i=0;i<500;i++) {
-        if(arbol.buscaRec(vectorFarmacias[i])==nullptr) {
+        if(arbol.buscaRec(vectorFarmacias[i])->get_cif() != cifs[i]) {
             std::cout<<"No se encontro"<<std::endl;
-        }else {
-            if(arbol.buscaRec(vectorFarmacias[i])->get_cif()!=cifs[i]){
-                std::cout<<"CIF no encontrado"<<std::endl;
-            }else {
-                std::cout<<cifs[i]<<std::endl;
-            }
         }
     }
     std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
-# 165 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+# 159 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
                                                                       1000
-# 165 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+# 159 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
                                                                                     ) << " segs." << std::endl;
     tiempo=((clock() - t_ini) / (float) 
-# 166 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+# 160 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
                                        1000
-# 166 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+# 160 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
                                                      );
 }
 void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[],float &tiempo) {
@@ -65119,19 +65111,17 @@ void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[]
     for(int i=0;i<500;i++) {
         if(vectorFarmacias[i].get_cif()!=cifs[i]) {
             std::cout<<"No se encontro"<<std::endl;
-        }else {
-            std::cout<<cifs[i]<<std::endl;
         }
     }
     std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
-# 177 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+# 169 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
                                                                       1000
-# 177 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+# 169 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
                                                                                     ) << " segs." << std::endl;
     tiempo=((clock() - t_ini) / (float) 
-# 178 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
+# 170 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp" 3
                                        1000
-# 178 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
+# 170 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/main.cpp"
                                                      );
 }
 
@@ -65152,24 +65142,24 @@ void mostrarFarmacia(Farmacia &farma) {
 int main() {
 
     std::cout<<"Insercion de las farmacias en un arbol"<<std::endl;
-    AVL<Farmacia> a1 = leeFicheroArbol("../farmacias.csv");
+    AVL<Farmacia> arbol1 = leeFicheroArbol("../farmacias.csv");
     std::cout<<"\n";
     std::cout<<"Insercion de las farmacias en un vector dinamico"<<std::endl;
-    VDinamico<Farmacia> v1 = leeFicheroVector("../farmacias.csv");
+    VDinamico<Farmacia> vector1 = leeFicheroVector("../farmacias.csv");
     std::cout<<"\n";
 
     std::cout<<"Muestra por pantalla de las primeras 500 farmacias"<<std::endl;
     std::string vectorCIFS[500];
     for (int i=0; i<500; i++) {
-        vectorCIFS[i] = v1[i].get_cif();
+        vectorCIFS[i] = vector1[i].get_cif();
     }
 
     std::cout<<"\n";
     std::cout<<"Conteo del tiempo sobre el arbol y sobre el vector"<<std::endl;
 
     float tiempo1=0, tiempo2=0;
-    calcularbusqueda(v1,a1,vectorCIFS,tiempo1);
-    busquedasegundotipo(v1,vectorCIFS,tiempo2);
+    calcularbusqueda(vector1,arbol1,vectorCIFS,tiempo1);
+    busquedasegundotipo(vector1,vectorCIFS,tiempo2);
     if(tiempo1 > tiempo2) {
         std::cout<<"Es mas eficiente buscar en AVL"<<std::endl;
     }else {
@@ -65182,10 +65172,10 @@ int main() {
     }
     std::cout<<"\n";
 
-    std::cout<<"La altura del arbol de farmacias es de: "<<a1.get_altura();
+    std::cout<<"La altura del arbol de farmacias es de: "<<arbol1.get_altura();
     std::cout<<"\n";
 
-    VDinamico<Farmacia> vectorInorden = a1.recorreInorden();
+    VDinamico<Farmacia> vectorInorden = arbol1.recorreInorden();
     for (int i = 0; i<100; i++) {
         std::cout<<"Farmacia numero "<< i+1<<std::endl;
         mostrarFarmacia(vectorInorden[i]);
@@ -65194,6 +65184,34 @@ int main() {
 
 
     MediExpress medi("../pa_medicamentos.csv","../lab2.csv","../farmacias.csv");
-    std::cout<<medi.buscarLabCiudad("Madrid").tamlog_();
+    std::string cif[27] = {
+        "37656422V","46316032N", "77092934Q", "33961602D", "B62351861",
+        "B62351861","B65828113", "46138599R", "35069965W", "37579913Y",
+        "37682300C","37643742X", "46112335A", "47980171D", "38116138D",
+        "46315600V","37640233C", "37931842N", "33964303L", "35022080A",
+        "B66046640","E66748344", "47640201W", "B66621954", "46121385Z","X6806622W","46046390E"};
+
+
+    int id=3640;
+    for (int i = 0; i<27; i++) {
+        Farmacia *farmaOxido = medi.buscaFarmacia(cif[i]);
+        PaMedicamento *medicam = farmaOxido->buscaMedicam(id);
+
+        if (!medicam) {
+            std::cout<<"Los datos de la farmacia que contiene magnesio son: "<<std::endl;
+            mostrarFarmacia(*farmaOxido);
+        }else {
+            farmaOxido->pedidoMedicam(id);
+        }
+    }
+    VDinamico<PaMedicamento*> medicamentosOxido= medi.buscaCompuesto("MAGNESIO");
+    ListaEnlazada<Laboratorio*> labsOxido;
+    for (int i = 0; i<medicamentosOxido.tamlog_(); i++) {
+        if (medicamentosOxido[i]->getServe()) {
+            Laboratorio *auxilio = medicamentosOxido[i]->getServe();
+            labsOxido.insertarFinal(auxilio);
+        }
+    }
+
     return 0;
 }

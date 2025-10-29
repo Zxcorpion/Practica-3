@@ -41647,19 +41647,12 @@ public:
     void setId(int id);
 
     const std::string &getNomrbeLab() const;
-
     void setNomrbeLab(const std::string &nomrbeLab);
-
     const std::string &getDireccion() const;
-
     void setDireccion(const std::string &direccion);
-
     const std::string &getCodiPostal() const;
-
     void setCodiPostal(const std::string &codiPostal);
-
     const std::string &getLocalidad() const;
-
     void setLocalidad(const std::string &localidad);
 };
 # 2 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Laboratorio.cpp" 2

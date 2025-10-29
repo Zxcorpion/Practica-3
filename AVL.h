@@ -1,9 +1,5 @@
-//
-// Created by marco on 22/10/2025.
-//
-
-#ifndef AVL_H
-#define AVL_H
+#ifndef PRACTICA3_AVL_H
+#define PRACTICA3_AVL_H
 #include "VDinamico.h"
 #include <iostream>
 //Hay que saber cuantos nodos tiene un arbol usando un contador
@@ -32,7 +28,7 @@ class AVL {
     void destruir(NodoA<A> *&p);
     NodoA<A>* copiar(NodoA<A> *p);
     A* buscaRecursiva(A &dato,NodoA<A>* &p);
-    unsigned int numElem(NodoA<A>* &p,unsigned int& auxiliar);
+    void numElem(NodoA<A>* &p,unsigned int& auxiliar);
     unsigned int altu(NodoA<A>* p);
     A* buscaIterativa(A &dato,NodoA<A>* p);
    public:
@@ -41,12 +37,13 @@ class AVL {
     virtual ~AVL();
     bool buscar(A &ele, A &resultado);
     bool insertar (A &elem) {
-        bool resultado=inserta(raiz, elem);
-        if(resultado!=false) {
-            numEle++;
-        }
-        return resultado;
+        if (buscaRec(elem))
+            return false;
+        inserta(raiz, elem);
+        numEle++;
+        return true;
     }
+
     VDinamico<A> recorrePreorden(){
         VDinamico<A> vector;
         preorden(raiz, vector);
@@ -63,11 +60,13 @@ class AVL {
     AVL<A> &operator=(const AVL<A> &orig);
     A* buscaRec(A &dato){return buscaRecursiva(dato,raiz);}
     unsigned int numElementos() {
-        int aux=0;
-        return numElem(raiz,aux);
+        unsigned int aux=0;
+        numElem(raiz,aux);
+        this->numEle = aux;
+        return aux;
     }
     unsigned int get_altura() {
-        altura=altu(raiz)-1;
+        altura=altu(raiz) - 1;
         return altura;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
@@ -232,20 +231,19 @@ A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
     }
 }
 template<typename A>
-unsigned int AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
+void AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
     if (p) {
         auxiliar++;
-        numElem(p->izq);
-        numElem(p->der);
+        numElem(p->izq,auxiliar);
+        numElem(p->der,auxiliar);
     }
-    numEle=auxiliar;
-    return auxiliar;
 }
 template<typename A>
 unsigned int AVL<A>::altu(NodoA<A> *p) {
     if(p==nullptr){
         return 0;//si el arbol está vacio entonces la altura es 0;
     }
+
     if(p) {
         //Actualizo la altura cada vez que se cumpla la siguiente condición
         unsigned int  alt_izq = altu(p->izq);
@@ -276,13 +274,4 @@ A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
 
 
 
-
-
-
-
-
-
-
-
-
-#endif //AVL_H
+#endif //PRACTICA3_AVL_H

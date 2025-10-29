@@ -64202,7 +64202,7 @@ class AVL {
     void destruir(NodoA<A> *&p);
     NodoA<A>* copiar(NodoA<A> *p);
     A* buscaRecursiva(A &dato,NodoA<A>* &p);
-    unsigned int numElem(NodoA<A>* &p,unsigned int& auxiliar);
+    void numElem(NodoA<A>* &p,unsigned int& auxiliar);
     unsigned int altu(NodoA<A>* p);
     A* buscaIterativa(A &dato,NodoA<A>* p);
    public:
@@ -64211,12 +64211,13 @@ class AVL {
     virtual ~AVL();
     bool buscar(A &ele, A &resultado);
     bool insertar (A &elem) {
-        bool resultado=inserta(raiz, elem);
-        if(resultado!=false) {
-            numEle++;
-        }
-        return resultado;
+        if (buscaRec(elem))
+            return false;
+        inserta(raiz, elem);
+        numEle++;
+        return true;
     }
+
     VDinamico<A> recorrePreorden(){
         VDinamico<A> vector;
         preorden(raiz, vector);
@@ -64233,12 +64234,14 @@ class AVL {
     AVL<A> &operator=(const AVL<A> &orig);
     A* buscaRec(A &dato){return buscaRecursiva(dato,raiz);}
     unsigned int numElementos() {
-        int aux=0;
-        return numElem(raiz,aux);
+        unsigned int aux=0;
+        numElem(raiz,aux);
+        this->numEle = aux;
+        return aux;
     }
     unsigned int get_altura() {
-        altura=altu(raiz);
-        return altura-1;
+        altura=altu(raiz) - 1;
+        return altura;
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
@@ -64402,20 +64405,19 @@ A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
     }
 }
 template<typename A>
-unsigned int AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
+void AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
     if (p) {
         auxiliar++;
-        numElem(p->izq);
-        numElem(p->der);
+        numElem(p->izq,auxiliar);
+        numElem(p->der,auxiliar);
     }
-    numEle=auxiliar;
-    return auxiliar;
 }
 template<typename A>
 unsigned int AVL<A>::altu(NodoA<A> *p) {
     if(p==nullptr){
         return 0;
     }
+
     if(p) {
 
         unsigned int alt_izq = altu(p->izq);
@@ -64469,19 +64471,12 @@ public:
     void setId(int id);
 
     const std::string &getNomrbeLab() const;
-
     void setNomrbeLab(const std::string &nomrbeLab);
-
     const std::string &getDireccion() const;
-
     void setDireccion(const std::string &direccion);
-
     const std::string &getCodiPostal() const;
-
     void setCodiPostal(const std::string &codiPostal);
-
     const std::string &getLocalidad() const;
-
     void setLocalidad(const std::string &localidad);
 };
 # 11 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/PaMedicamento.h" 2
@@ -64885,24 +64880,19 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
 }
 # 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
-
-
-
-
-
-
-
-class MediExpres;
+# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
+class MediExpress;
 
 
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
     nombre_="-",direccion_="-",codPostal_="-";
-
+    MediExpress* linkMedi;
+    VDinamico<PaMedicamento*> dispense;
 public:
     Farmacia(std::string cif="-",std::string provincia="-",std::string localidad="-",
-    std::string nombre="-",std::string direccion="-",std::string codPostal="-");
+    std::string nombre="-",std::string direccion="-",std::string codPostal="-", MediExpress *link=0);
     Farmacia(const Farmacia &orig);
     virtual ~Farmacia();
 
@@ -64918,6 +64908,9 @@ public:
     void set_direccion(const std::string &direccion);
     std::string get_cod_postal() const;
     void set_cod_postal(const std::string &cod_postal);
+    PaMedicamento *buscaMedicam(const int &ID);
+    void pedidoMedicam(const int &ID);
+    void dispensaMedicam(PaMedicamento *pa);
 
     Farmacia &operator=(const Farmacia& orig);
     bool operator==(const Farmacia &orig) const;
@@ -64946,10 +64939,15 @@ public:
 
     void suministrarMed(PaMedicamento *pa,Laboratorio *l);
     Laboratorio *buscarLab(const std::string &nombreLab);
+    ListaEnlazada<Laboratorio*> buscarLabs(const std::string &nombrePA);
     VDinamico<Laboratorio*> buscarLabCiudad(const std::string &nombreCiudad);
     VDinamico<PaMedicamento*> buscaCompuesto(const std::string &nombrePA);
     VDinamico<PaMedicamento*> getMedicamentoSinLab();
     void borrarLaboratorio(const std::string &nombreCiudad);
+    PaMedicamento* buscaCompuesto(const int &ID_);
+    void suministrarFarmacia(Farmacia *farma, int ID_);
+    Farmacia* buscaFarmacia(const std::string &nombreFar);
+
 };
 # 2 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp" 2
 
@@ -64958,8 +64956,8 @@ public:
 
 
 MediExpress::MediExpress():
-medication(),labs()
-{}
+medication(),labs(),pharmacy() {
+}
 
 
 
@@ -65103,8 +65101,6 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
 
     ListaEnlazada<Laboratorio>::Iterador<Laboratorio> itLaboratorio = labs.iterador();
-
-
     int tam = 0;
 
     while (!itLaboratorio.fin() && tam +1 < medication.tamlog_()) {
@@ -65113,7 +65109,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
         tam+=2;
         itLaboratorio.siguiente();
     }
-# 165 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
+# 164 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
     VDinamico<Laboratorio*> labsMadrid = this->buscarLabCiudad("Madrid");
     VDinamico<PaMedicamento*> medSin = this->getMedicamentoSinLab();
     std::cout << "Medicamentos sin asignar: " << medSin.tamlog_() << std::endl;
@@ -65121,16 +65117,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
     for (int i = 0; i < medSin.tamlog_(); i++) {
         medSin[i]->servidoPor(labsMadrid[i]);
     }
-    int cont2=0;
-    for (int i=0; i<medication.tamlog_(); i++) {
-        if (!medication[i].getServe()) {
-            cont2++;
-        }
-    }
-    std::cout<<cont2<<std::endl;
-
-
-
+# 182 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
     std::string cif_ = "";
     std::string provincia_= "";
     std::string localidadLab_= "";
@@ -65160,7 +65147,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
                 getline(columnas, codPostal_,';');
 
 
-                Farmacia farmacia_(cif_,provincia_,localidadLab_,nombre_, direccionLab_, codPostal_);
+                Farmacia farmacia_(cif_,provincia_,localidadLab_,nombre_, direccionLab_, codPostal_,this);
                 try {
                     pharmacy.insertar(farmacia_);
                 }catch (std::out_of_range &e) {
@@ -65190,6 +65177,72 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
     } else {
         std::cout << "Error de apertura en archivo" << std::endl;
     }
+
+
+    VDinamico<std::string> vectorCIFS;
+    is.open(farmacias);
+    if ( is.good() ) {
+
+        clock_t t_ini = clock();
+
+        while ( getline(is, fila ) ) {
+
+
+            if (fila!="") {
+
+                columnas.str(fila);
+
+
+
+                getline(columnas, cif_, ';');
+
+                try {
+                    vectorCIFS.insertar(cif_);
+                }catch (std::out_of_range &e) {
+                    std::cerr<<e.what()<<std::endl;
+                }
+
+                fila="";
+                columnas.str(std::string());
+                columnas.clear();
+                columnas.str(fila);
+
+                std::cout << ++contador
+                          << "CIF de Farmacia = " << cif_
+                          << std::endl;
+            }
+        }
+
+        is.close();
+
+        std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) 
+# 275 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp" 3
+                                                                          1000
+# 275 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.cpp"
+                                                                                        ) << " segs." << std::endl;
+    } else {
+        std::cout << "Error de apertura en archivo" << std::endl;
+    }
+
+
+
+    int k=0;
+    for (int i= 0; i<vectorCIFS.tamlog_();i++) {
+        Farmacia farmaciaInsercion;
+        farmaciaInsercion.set_cif(vectorCIFS[i]);
+        Farmacia *aux = pharmacy.buscaRec(farmaciaInsercion);
+        int c=0;
+        while (c<100) {
+            suministrarFarmacia(aux,medication[k].get_id_num());
+            if (k==medication.tamlog_()-1) {
+                k=0;
+            }else {
+                k++;
+                c++;
+            }
+        }
+    }
+
 }
 
 
@@ -65342,4 +65395,41 @@ void MediExpress::borrarLaboratorio(const std::string &nombreCiudad) {
         }else
             encontrado.siguiente();
     }
+}
+
+PaMedicamento *MediExpress::buscaCompuesto(const int &ID_) {
+    PaMedicamento auxiliar;
+    for(unsigned int i=0;i<medication.tamlog_();i++) {
+        if(medication[i].get_id_num() == ID_) {
+            return &auxiliar;
+        }
+    }
+    return 0;
+}
+
+
+void MediExpress::suministrarFarmacia(Farmacia *farma, int ID_) {
+    PaMedicamento *medicam = buscaCompuesto(ID_);
+    if (medicam) {
+        farma->dispensaMedicam(medicam);
+
+
+    }
+}
+
+Farmacia *MediExpress::buscaFarmacia(const std::string &cif_) {
+    Farmacia auxiliar;
+    auxiliar.set_cif(cif_);
+    return pharmacy.buscaRec(auxiliar);
+}
+
+ListaEnlazada<Laboratorio*> MediExpress::buscarLabs(const std::string &nombrePA) {
+   ListaEnlazada<Laboratorio*> lista;
+   for (int i =0; i<medication.tamlog_();i++) {
+       Laboratorio *auxilio = medication[i].getServe();
+       if (medication[i].get_nombre() == nombrePA) {
+           lista.insertarFinal(auxilio);
+       }
+   }
+    return lista;
 }

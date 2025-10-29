@@ -1,6 +1,3 @@
-//
-// Created by marco on 22/10/2025.
-//
 #include "MediExpress.h"
 
 /**
@@ -8,8 +5,8 @@
  * @post Se crea un objeto con los valores asignados por defecto
  */
 MediExpress::MediExpress():
-medication(),labs(),pharmacy()
-{}
+medication(),labs(),pharmacy() {
+}
 
 /**
  * @brief Constructor parametrizado de la clase MediExpress
@@ -145,8 +142,6 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
     //Insertar
     ListaEnlazada<Laboratorio>::Iterador<Laboratorio> itLaboratorio = labs.iterador();
-
-
     int tam = 0;
 
     while (!itLaboratorio.fin() && tam +1 < medication.tamlog_()) {
@@ -164,7 +159,8 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
             cont++;
         }
     }
-    */ //La comprobacion sobra ya que el tamaño logico de sinLabs es el contador
+    */
+    //La comprobacion sobra ya que el tamaño logico de sinLabs es el contador
     VDinamico<Laboratorio*> labsMadrid = this->buscarLabCiudad("Madrid");
     VDinamico<PaMedicamento*> medSin = this->getMedicamentoSinLab();
     std::cout << "Medicamentos sin asignar: " << medSin.tamlog_() << std::endl;
@@ -212,7 +208,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
                 getline(columnas, codPostal_,';');
 
 
-                Farmacia farmacia_(cif_,provincia_,localidadLab_,nombre_, direccionLab_, codPostal_);
+                Farmacia farmacia_(cif_,provincia_,localidadLab_,nombre_, direccionLab_, codPostal_,this);
                 try {
                     pharmacy.insertar(farmacia_);
                 }catch (std::out_of_range &e) {
@@ -238,6 +234,68 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
     } else {
         std::cout << "Error de apertura en archivo" << std::endl;
     }
+
+    //abrir fichero para meter vector de string
+    VDinamico<std::string> vectorCIFS;
+    is.open(farmacias); //carpeta de proyecto
+    if ( is.good() ) {
+
+        clock_t t_ini = clock();
+
+        while ( getline(is, fila ) ) {
+
+            //¿Se ha leído una nueva fila?
+            if (fila!="") {
+
+                columnas.str(fila);
+
+                //formato de fila: id_number;id_alpha;nombre;
+
+                getline(columnas, cif_, ';'); //leemos caracteres hasta encontrar y omitir ';'
+
+                try {
+                    vectorCIFS.insertar(cif_);
+                }catch (std::out_of_range &e) {
+                    std::cerr<<e.what()<<std::endl;
+                }
+
+                fila="";
+                columnas.str(std::string());
+                columnas.clear();
+                columnas.str(fila);
+
+                std::cout << ++contador
+                          << "CIF de Farmacia = " << cif_
+                          <<  std::endl;
+            }
+        }
+
+        is.close();
+
+        std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    } else {
+        std::cout << "Error de apertura en archivo" << std::endl;
+    }
+
+
+    //Aniadimos todos los cifs a cada farmacia
+    int k=0;
+    for (int i= 0; i<vectorCIFS.tamlog_();i++) {
+        Farmacia farmaciaInsercion;
+        farmaciaInsercion.set_cif(vectorCIFS[i]);
+        Farmacia *aux = pharmacy.buscaRec(farmaciaInsercion);
+        int c=0;
+        while (c<100) {
+            suministrarFarmacia(aux,medication[k].get_id_num());
+            if (k==medication.tamlog_()-1) {
+                k=0;
+            }else {
+                k++;
+                c++;
+            }
+        }
+    }
+
 }
 
 /**
@@ -392,33 +450,39 @@ void MediExpress::borrarLaboratorio(const std::string &nombreCiudad) {
     }
 }
 
-PaMedicamento *MediExpress::buscaCompuesto(const int ID_) {
-    PaMedicamento *auxiliar;
+PaMedicamento *MediExpress::buscaCompuesto(const int &ID_) {
+    PaMedicamento auxiliar;
     for(unsigned int i=0;i<medication.tamlog_();i++) {
         if(medication[i].get_id_num() == ID_) {
-            return auxiliar;
+            return &auxiliar;
         }
     }
     return 0;
 }
 
 
-void MediExpress::suministrarFarmacia(Farmacia farma, int ID_) {
+void MediExpress::suministrarFarmacia(Farmacia *farma, int ID_) {
     PaMedicamento *medicam = buscaCompuesto(ID_);
     if (medicam) {
-        farma.dispensaMedicam(*medicam);
-    }else {
-        throw std::invalid_argument("Error al suministrar farmacia:Medicamento no encontrado");
+        farma->dispensaMedicam(medicam);
+    // }else {
+    //     throw std::invalid_argument("Error al suministrar farmacia: Medicamrnto no encontrado");
     }
-}
-Farmacia *MediExpress::buscaFarmacia(const std::string &cif_,VDinamico<Farmacia> farmacias) {
-    Farmacia *auxiliar=nullptr;
-    for(unsigned int i=0;i<farmacias.tamlog_();i++) {
-        if(pharmacy.buscaRec(farmacias[i])->get_cif()==cif_) {
-            auxiliar=&farmacias[i];
-            return auxiliar;
-        }
-    }
-    return auxiliar;
 }
 
+Farmacia *MediExpress::buscaFarmacia(const std::string &cif_) {
+    Farmacia auxiliar;
+    auxiliar.set_cif(cif_);
+    return pharmacy.buscaRec(auxiliar);
+}
+
+ListaEnlazada<Laboratorio*> MediExpress::buscarLabs(const std::string &nombrePA) {
+   ListaEnlazada<Laboratorio*> lista;
+   for (int i =0; i<medication.tamlog_();i++) {
+       Laboratorio *auxilio = medication[i].getServe();
+       if (medication[i].get_nombre() == nombrePA) {
+           lista.insertarFinal(auxilio);
+       }
+   }
+    return lista;
+}

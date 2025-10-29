@@ -1,7 +1,3 @@
-//
-// Created by marco on 22/10/2025.
-//
-
 #include "Laboratorio.h"
 Laboratorio::Laboratorio(int id_, std::string nombreLab_, std::string direccion_, std::string codiPostal_,std::string localidad_):
 id(id_),

@@ -1,13 +1,9 @@
 //
-// Created by marco on 22/10/2025.
+// Created by admin on 21/10/2025.
 //
 
-#ifndef MEDIEXPRESS_H
-#define MEDIEXPRESS_H
-
-
-
-
+#ifndef PRACTICA3_MEDIEXPRESS_H
+#define PRACTICA3_MEDIEXPRESS_H
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,18 +37,15 @@ public:
 
     void suministrarMed(PaMedicamento *pa,Laboratorio *l);
     Laboratorio *buscarLab(const std::string &nombreLab);
+    ListaEnlazada<Laboratorio*> buscarLabs(const std::string &nombrePA);
     VDinamico<Laboratorio*> buscarLabCiudad(const std::string &nombreCiudad);
     VDinamico<PaMedicamento*> buscaCompuesto(const std::string &nombrePA);
     VDinamico<PaMedicamento*> getMedicamentoSinLab();
     void borrarLaboratorio(const std::string &nombreCiudad);
-    PaMedicamento* buscaCompuesto(const int ID_);
-    void suministrarFarmacia(Farmacia farma, int ID_);
-    Farmacia* buscaFarmacia(const std::string &cif_,VDinamico<Farmacia> farmacias);
+    PaMedicamento* buscaCompuesto(const int &ID_);
+    void suministrarFarmacia(Farmacia *farma, int ID_);
+    Farmacia* buscaFarmacia(const std::string &nombreFar);
 
 };
 
-
-
-
-
-#endif //MEDIEXPRESS_H
+#endif //PRACTICA3_MEDIEXPRESS_H
