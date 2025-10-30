@@ -12,7 +12,7 @@ medication(),labs(),pharmacy() {
  * @brief Constructor parametrizado de la clase MediExpress
  * @param medicamentos pasados por referencia
  * @param laboratorios pasador por referencia
- * @post Se crea un objeto de la clase MediExpress con los valores pasados por cabecera
+ * @post Se crea un objeto de la clase MediExpress con los valores pasados por cabecera, que son leidos de varios ficheros .csv
  */
 MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias) {
     std::ifstream is;
@@ -450,6 +450,12 @@ void MediExpress::borrarLaboratorio(const std::string &nombreCiudad) {
     }
 }
 
+/**
+ * @brief Metodo que se encarga de buscar un medicamento segun su id
+ * @param ID_ Id del PAmedicamento a buscar
+ * @return PAmedicamento que se quiere buscar
+ * @post El medicamento buscado es encontrado y devuelto, en caso de no encontrarse, se devuelve un puntero a null
+ */
 PaMedicamento *MediExpress::buscaCompuesto(const int &ID_) {
     PaMedicamento auxiliar;
     for(unsigned int i=0;i<medication.tamlog_();i++) {
@@ -460,7 +466,11 @@ PaMedicamento *MediExpress::buscaCompuesto(const int &ID_) {
     return 0;
 }
 
-
+/**
+ * @brief El metodo permite suministrar un PAmedicamento en caso de que la farmacia no lo tenga
+ * @param farma Farmacia sobre la que queremos añadir el PAmedicamento
+ * @param ID_ ID del PAmedicamento que se quiere buscar
+ */
 void MediExpress::suministrarFarmacia(Farmacia *farma, int ID_) {
     PaMedicamento *medicam = buscaCompuesto(ID_);
     if (medicam) {

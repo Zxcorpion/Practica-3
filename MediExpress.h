@@ -18,6 +18,9 @@
 #include "Farmacia.h"
 
 
+/**
+ * @brief Definicion de la clase MediExpress
+ */
 class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;

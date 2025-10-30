@@ -170,6 +170,11 @@ void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[]
     tiempo=((clock() - t_ini) / (float) CLOCKS_PER_SEC);
 }
 
+/**
+ * @brief La funcion muestra por pantalla una farmacia con sus respectivos datos
+ * @param farma Farmacia que vamos a mostrar
+ * @post Se muestran por pantalla todos los datos relacionados con una farmacia
+ */
 void mostrarFarmacia(Farmacia &farma) {
     std::cout<<"CIF = " << farma.get_cif()
     << ", Provincia = " << farma.get_provincia()
