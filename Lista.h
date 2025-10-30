@@ -1,6 +1,9 @@
+//
+// Created by marco on 22/10/2025.
+//
 
-#ifndef PRACTICA3_LISTA_H
-#define PRACTICA3_LISTA_H
+#ifndef LISTA_H
+#define LISTA_H
 #include <stdexcept>
 
 /**
@@ -414,7 +417,7 @@ ListaEnlazada<L> ListaEnlazada<L>::concatena(const ListaEnlazada<L> &origen) {
  */
 template<typename L>
 ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
-    this->cola = origen.cabecera;
+   // this->cola = origen.cabecera;
     Nodo<L> *aux = origen.cabecera;
     while(aux != 0) {
         this->insertarFinal(aux->dato);
@@ -423,6 +426,4 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
     return this;
 }
 
-
-
-#endif //PRACTICA3_LISTA_H
+#endif //LISTA_H

@@ -1,5 +1,9 @@
-#ifndef PRACTICA3_AVL_H
-#define PRACTICA3_AVL_H
+//
+// Created by marco on 22/10/2025.
+//
+
+#ifndef AVL_H
+#define AVL_H
 #include "VDinamico.h"
 #include <iostream>
 //Hay que saber cuantos nodos tiene un arbol usando un contador
@@ -71,6 +75,12 @@ class AVL {
     }
     A* buscaIt(A &dato){return buscaIterativa(dato,raiz);}
 };
+
+/**
+ * @brief Funcion que inserta en un vector dinamico una serie de nodos en preorden
+ * @param p NodoA<A> puntero
+ * @param aux VDinamico<A> pasado por referencia
+ */
 template <class A>
  void AVL<A>::preorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
@@ -80,7 +90,11 @@ template <class A>
         preorden (p->der, aux);
     }
 }
-
+/**
+ * @brief Funcion que inserta en un vector dinamico una serie de nodos en inorde
+ * @param p NodoA<A> puntero
+ * @param aux VDinamico<A> pasado por referencia
+ */
 template <class A>
 void AVL<A>::inorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
@@ -90,6 +104,11 @@ void AVL<A>::inorden (NodoA<A> *p, VDinamico<A> &aux){
         inorden (p->der, aux);
     }
 }
+/**
+ * @brief Funcion que inserta en un vector dinamico una serie de nodos en postorden
+ * @param p NodoA<A> puntero
+ * @param aux VDinamico<A> pasado por referencia
+ */
 template <class A>
 void AVL<A>::postorden (NodoA<A> *p, VDinamico<A> &aux){
     if (p){
@@ -100,7 +119,10 @@ void AVL<A>::postorden (NodoA<A> *p, VDinamico<A> &aux){
     }
 }
 
-
+/**
+ * @brief Funcion para hacer una rotacion de nodos hacia la izquierda
+ * @param p puneto NodoA<A>
+ */
 template<typename A>
 void AVL<A>::rotIzqda(NodoA<A>* &p){
     NodoA<A> *q = p, *r;
@@ -112,6 +134,10 @@ void AVL<A>::rotIzqda(NodoA<A>* &p){
     r->bal++;
     if(q->bal > 0) r->bal += q->bal;
 }
+/**
+ * @brief Funcion para hacer una rotacion de nodos hacia la derecha
+ * @param p puneto NodoA<A>
+ */
 template<typename A>
 void AVL<A>::rotDecha(NodoA<A>* &p){
     NodoA<A> *q = p, *l;
@@ -123,6 +149,13 @@ void AVL<A>::rotDecha(NodoA<A>* &p){
     l->bal--;
     if(q->bal < 0) l->bal -= -q->bal;
 }
+
+/**
+ * @brief Funcion para buscar en un vector ubn elemento
+ * @param A ele pasado por referencia
+ * @param p puntero NodoA<A>
+ * @return 0 si no se encuentra el elemento o p si se encuentra
+ */
 template<typename A>
 NodoA<A> AVL<A>::buscaClave(A &ele, NodoA<A> *p) {
     if (!p)
@@ -133,6 +166,13 @@ NodoA<A> AVL<A>::buscaClave(A &ele, NodoA<A> *p) {
         return buscaClave (ele, p->der);
     else return p;
 }
+
+/**
+ * @brief Funcion para buscar un elemento llamando a la funcion buscarClave
+ * @param A ele pasado por refrencia
+ * @param A resultado  pasado por referencia
+ * @return bool si se ha encontrado o no
+ */
 template<typename A>
 bool AVL<A>::buscar(A &ele, A &resultado) {
     NodoA<A> *p = buscaClave (ele, raiz);
@@ -142,6 +182,13 @@ bool AVL<A>::buscar(A &ele, A &resultado) {
     }
     return false;
 }
+
+/**
+ * @brief Funcion para insertar dentro de un arbol
+ * @param c puntero NodoA<A>
+ * @param A dato pasado por referencia
+ * @return deltaH
+ */
 template<typename A>
  int AVL<A>::inserta(NodoA<A>* &c, A &dato){
     NodoA<A> *p = c;
@@ -168,6 +215,11 @@ template<typename A>
             }   }   }
     return deltaH;
 }
+
+/**
+ * @brief Funcion para destruir un arbol AVL<A>
+ * @param p NodoA<A>
+ */
 template<typename A>
 void AVL<A>::destruir(NodoA<A> *&p) { //Ponemos *& porque modificamos el arbol
     if (p != nullptr) {
@@ -180,6 +232,11 @@ void AVL<A>::destruir(NodoA<A> *&p) { //Ponemos *& porque modificamos el arbol
     altura = numEle = 0;
 }
 
+/**
+ * @brief Funcion para copiar un arbol en preordemn
+ * @param p NodoA<A>
+ * @return 0 para la recursividad o q cuando se completa la copia
+ */
 template<typename A>
 NodoA<A>* AVL<A>::copiar(NodoA<A> *p) {
     if (!p) {
@@ -191,6 +248,11 @@ NodoA<A>* AVL<A>::copiar(NodoA<A> *p) {
     return q;
 }
 
+/**
+ * @brief Constructor de copia de AVL
+ * @param orig Objetos que vamos a copiar
+ * @post Se modifica el objeto this
+ */
 template<typename A>
 AVL<A>::AVL(const AVL<A> &orig):
 altura(orig.altura),
@@ -199,12 +261,23 @@ numEle(orig.numEle)
     raiz = 0 ; //Aqui ponemos a null la raiz y con el metodo privado copiamos los nodos
     raiz = copiar(orig.raiz);
 }
+
+/**
+ * @brief Funcion que destruye un arbol llamando a la funcion privada destruir
+ * @post Se libera la memoria correctamente
+ */
 template<typename A>
 AVL<A>::~AVL() {
     if(raiz!=nullptr) {
         destruir(raiz);
     }
 }
+
+/**
+ * @brief Operador de asignacion de un arbol AVL
+ * @param orig objeto que utilizamos de referencia para asginar
+ * @return this
+ */
 template<typename A>
 AVL<A> &AVL<A>::operator=(const AVL<A> &orig) {
     if (this != &orig) {
@@ -215,6 +288,13 @@ AVL<A> &AVL<A>::operator=(const AVL<A> &orig) {
     }
     return *this;
 }
+
+/**
+ * @brief Busqueda recursiva en AVL
+ * @param A dato pasado por referencia
+ * @param NodoA<A>* p pasado por referencia
+ * @return p->dato
+ */
 template<typename A>
 A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
     if(p==nullptr)
@@ -230,6 +310,12 @@ A *AVL<A>::buscaRecursiva(A &dato, NodoA<A>* &p) {
         return buscaRecursiva(dato, p->der);
     }
 }
+
+/**
+ * @brief Funcion para contar el numero de elementos que hay en un arbol
+ * @param p pasado por referencia
+ * @param auxiliar  es pasado por referencia
+ */
 template<typename A>
 void AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
     if (p) {
@@ -238,6 +324,12 @@ void AVL<A>::numElem(NodoA<A>* &p,unsigned int& auxiliar) {
         numElem(p->der,auxiliar);
     }
 }
+
+/**
+ * @brief Funcion para calcular la altura de un AVL
+ * @param p
+ * @return 1+alt del arbol
+ */
 template<typename A>
 unsigned int AVL<A>::altu(NodoA<A> *p) {
     if(p==nullptr){
@@ -256,6 +348,12 @@ unsigned int AVL<A>::altu(NodoA<A> *p) {
     }
 }
 
+/**
+ * @brief Busqueda iterativa de un arbol
+ * @param dato de tipo A pasado por referencia
+ * @param p de la clase NodoA
+ * @return 0 si no encuentra nada o el dato que queremos encontrar
+ */
 template<typename A>
 A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
     //Mediante un while comprobamos todos los datos de todos los nodos aprovechando que sabemos que un arbol AVL se encuentra en orden
@@ -273,5 +371,4 @@ A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
 }
 
 
-
-#endif //PRACTICA3_AVL_H
+#endif //AVL_H

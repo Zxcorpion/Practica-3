@@ -148,7 +148,13 @@ VDinamico<Farmacia> leeFicheroVector(const std::string &fichero) {
     return vectorFarmacia;
 }
 
-
+/**
+ * @brief Funcion para calcular el tiempo de busqueda en un arbol usando la recursividad
+ * @param vectorFarmacias  objeto VDinamico<Farmacia> pasado por referencia
+ * @param arbol objeto de AVL<Farmacia> pasado por referencia
+ * @param cifs string vector pasado por referencia
+ * @param tiempo tiempo pasado por referencia para guardar el tiempo de busqueda
+ */
 void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,std::string cifs[],float &tiempo) {
     clock_t t_ini = clock();
     for(int i=0;i<500;i++) {
@@ -159,6 +165,12 @@ void calcularbusqueda(VDinamico<Farmacia> &vectorFarmacias,AVL<Farmacia> &arbol,
     std::cout << "Tiempo de lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
     tiempo=((clock() - t_ini) / (float) CLOCKS_PER_SEC);
 }
+/**
+ * @brief Funcion para calcular el tiempo de busqueda en un arbol usando la busqueda iterativa
+ * @param vectorFarmacias  objeto VDinamico<Farmacia> pasado por referencia
+ * @param cifs string vector pasado por referencia
+ * @param tiempo tiempo pasado por referencia para guardar el tiempo de busqueda
+ */
 void busquedasegundotipo(VDinamico<Farmacia> &vectorFarmacias,std::string cifs[],float &tiempo) {
     clock_t t_ini = clock();
     for(int i=0;i<500;i++) {

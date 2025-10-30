@@ -2,8 +2,8 @@
 /**
  * @brief Constructor por defecto y parametrizado
  * @param int id_num numero de identificación de medicamento que por defecto es 0
- * @param string id_alpha otra forma de identificación del medicamento que por defecto es " "
- * @param string nombre_ numero nombre del medicamento que por defecto es " "
+ * @param string id_alpha otra forma de identificación del medicamento que por defecto es ""
+ * @param string nombre_ numero nombre del medicamento que por defecto es ""
  */
 PaMedicamento::PaMedicamento(int id_num_,std::string id_alpha_, std::string nombre_):
 id_num(id_num_),
@@ -30,6 +30,7 @@ nombre(orig.nombre)
 }
 /**
  * @brief Destructor de la clase PaMedicamento
+ * @post Se libera la memoria correspondiente si el medicamento se encuentra asociado a un Laboratorio
  */
 PaMedicamento::~PaMedicamento() {
     if(serve != nullptr)
@@ -39,7 +40,7 @@ PaMedicamento::~PaMedicamento() {
 
 
 /**
- * @brief Función para leer el atributo id_num 
+ * @brief Función para leer el atributo id_num
  * @return Devuelve el atributo id_num
  */
 int PaMedicamento::get_id_num() const {
@@ -53,14 +54,14 @@ void PaMedicamento::set_id_num(int id_num) {
     this->id_num = id_num;
 }
 /**
- * @brief Función para leer el atributo id_alpha 
+ * @brief Función para leer el atributo id_alpha
  * @return devuelve el atributo id_alpha
  */
 std::string PaMedicamento::get_id_alpha() const {
     return id_alpha;
 }
 /**
- * @brief Función para establecer un nuevo valor al atributo id_alpha 
+ * @brief Función para establecer un nuevo valor al atributo id_alpha
  * @param string id_alpha nuevo valor al atributo id_alpha
  */
 void PaMedicamento::set_id_alpha(const std::string &id_alpha) {
@@ -75,7 +76,7 @@ std::string PaMedicamento::get_nombre() const {
 }
 /**
  * @brief Función para establecer un nombre
- * @param string nombre 
+ * @param string nombre
  */
 void PaMedicamento::set_nombre(const std::string &nombre) {
     this->nombre = nombre;
@@ -112,11 +113,18 @@ bool PaMedicamento::operator==(const PaMedicamento &orig) const {
     return orig.id_num == this->id_num;
 }
 
-
+/**
+ * @brief Funcion que devuelve el laboratorio que tiene asignado por una relacion de asociacion la clase PaMedicamento
+ * @return Laboratorio* serve
+ */
 Laboratorio *PaMedicamento::getServe() const {
     return serve;
 }
 
+/**
+ * @brief Función que asigna al atributo serve un laboratorio
+ * @param serve_ puntero de Laboratorio
+ */
 void PaMedicamento::servidoPor(Laboratorio *serve_) {
     this->serve = serve_;
 }

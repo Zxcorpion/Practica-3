@@ -1,3 +1,6 @@
+//
+// Created by marco on 22/10/2025.
+//
 #include "MediExpress.h"
 
 /**
@@ -11,7 +14,8 @@ medication(),labs(),pharmacy() {
 /**
  * @brief Constructor parametrizado de la clase MediExpress
  * @param medicamentos pasados por referencia
- * @param laboratorios pasador por referencia
+ * @param laboratorios pasados por referencia
+ * @param farmacias pasadas por referencia
  * @post Se crea un objeto de la clase MediExpress con los valores pasados por cabecera, que son leidos de varios ficheros .csv
  */
 MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias) {
@@ -304,7 +308,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
  * @post Se crea un objeto de la clase MediExpress copiando el objeto pasado por cabecera
  */
 MediExpress::MediExpress(const MediExpress &orig):
-medication(orig.medication),labs(orig.labs)
+medication(orig.medication),labs(orig.labs),pharmacy(orig.pharmacy)
 {}
 /**
  * @brief Operador de igualacion
@@ -316,6 +320,7 @@ MediExpress &MediExpress::operator=(const MediExpress &orig) {
     if(this!=&orig) {
         medication = orig.medication;
         labs = orig.labs;
+        pharmacy = orig.pharmacy;
     }
     return *this;
 }
@@ -393,7 +398,7 @@ VDinamico<Laboratorio*> MediExpress::buscarLabCiudad(const std::string &nombreCi
 /**
  * @brief Funcion para buscar compuestos en un vector dinamico de PaMedicamento
  * @param nombrePA  pasado por referencia
- * @return vector con los medicamentos que contienen el nombre pasado por referencia
+ * @return auxiliar vector con los medicamentos que contienen el nombre pasado por referencia
  * @post se crea un vector auxiliar y se inserta en el lo medicametnos convenientes
  */
 VDinamico<PaMedicamento*> MediExpress::buscaCompuesto(const std::string &nombrePA) {
@@ -480,12 +485,22 @@ void MediExpress::suministrarFarmacia(Farmacia *farma, int ID_) {
     }
 }
 
+/**
+ * @brief Funcion para buscar una farmacia en funcion de su cif
+ * @param cif_ cif de la Farmacia
+ * @return puntero de la farmacia encontrada
+ */
 Farmacia *MediExpress::buscaFarmacia(const std::string &cif_) {
     Farmacia auxiliar;
     auxiliar.set_cif(cif_);
     return pharmacy.buscaRec(auxiliar);
 }
 
+/**
+ * @brief Funcion para buscar laboratorios en funcion de nombrePA
+ * @param nombrePA PaMedicamento
+ * @return lista de laboratorios encontrados
+ */
 ListaEnlazada<Laboratorio*> MediExpress::buscarLabs(const std::string &nombrePA) {
    ListaEnlazada<Laboratorio*> lista;
    for (int i =0; i<medication.tamlog_();i++) {

@@ -1,9 +1,9 @@
 //
-// Created by admin on 21/10/2025.
+// Created by marco on 23/10/2025.
 //
 
-#ifndef PRACTICA3_FARMACIA_H
-#define PRACTICA3_FARMACIA_H
+#ifndef FARMACIA_H
+#define FARMACIA_H
 #include <iostream>
 
 #include "Lista.h"
@@ -48,4 +48,4 @@ public:
 };
 
 
-#endif //PRACTICA3_FARMACIA_H
+#endif //FARMACIA_H
