@@ -1,10 +1,9 @@
 //
-// Created by marco on 22/10/2025.
+// Created by admin on 21/10/2025.
 //
 
-#ifndef VDINAMICO_H
-#define VDINAMICO_H
-
+#ifndef PRACTICA3_VDINAMICO_H
+#define PRACTICA3_VDINAMICO_H
 #include <limits.h>
 #include <algorithm>
 #include <stdexcept>
@@ -224,7 +223,6 @@ T VDinamico<T>::borrar(unsigned int pos) {
 /**
  * @brief La funcion ordena el vector segun el id_num del medicamento
  * @tparam T tipo de dato
- * @post  T* vector que ordenado
  */
 template<typename T>
 void VDinamico<T>::ordenar() {
@@ -242,7 +240,6 @@ unsigned int VDinamico<T>::tamlog_() const {
 
 /**
  * @brief Destructor de la clase
- * @post se libera de manera correspondiente la memoria necesaria si el atributo T* vector tiene un valor diferente a nullptr
  */
 template<typename T>
 VDinamico<T>::~VDinamico() {
@@ -276,8 +273,4 @@ int VDinamico<T>::busquedaBinaria(T &d) {
     return -1; //Si no se encuentra lanzo -1
 }
 
-
-
-
-
-#endif //VDINAMICO_H
+#endif //PRACTICA3_VDINAMICO_H

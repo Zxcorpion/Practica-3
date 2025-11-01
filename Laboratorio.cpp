@@ -1,7 +1,3 @@
-//
-// Created by marco on 22/10/2025.
-//
-
 #include "Laboratorio.h"
 
 /**

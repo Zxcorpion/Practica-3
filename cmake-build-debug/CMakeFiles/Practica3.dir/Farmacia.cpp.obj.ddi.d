@@ -152,6 +152,7 @@ CMakeFiles\Practica3.dir\Farmacia.cpp.obj.ddi: \
  C:/Users/pablo/Downloads/Mingw/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/ostream.tcc \
  C:/Users/pablo/Downloads/Mingw/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/istream \
  C:/Users/pablo/Downloads/Mingw/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/istream.tcc \
+ C:/Users/pablo/Downloads/Segundo\ Curso/Estructuras/Practicas/Practica3/Lista.h \
  C:/Users/pablo/Downloads/Segundo\ Curso/Estructuras/Practicas/Practica3/PaMedicamento.h \
  C:/Users/pablo/Downloads/Segundo\ Curso/Estructuras/Practicas/Practica3/Laboratorio.h \
  C:/Users/pablo/Downloads/Segundo\ Curso/Estructuras/Practicas/Practica3/VDinamico.h \
@@ -190,5 +191,4 @@ CMakeFiles\Practica3.dir\Farmacia.cpp.obj.ddi: \
  C:/Users/pablo/Downloads/Mingw/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/sstream \
  C:/Users/pablo/Downloads/Mingw/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/sstream.tcc \
  C:/Users/pablo/Downloads/Mingw/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ctime \
- C:/Users/pablo/Downloads/Segundo\ Curso/Estructuras/Practicas/Practica3/AVL.h \
- C:/Users/pablo/Downloads/Segundo\ Curso/Estructuras/Practicas/Practica3/Lista.h
+ C:/Users/pablo/Downloads/Segundo\ Curso/Estructuras/Practicas/Practica3/AVL.h

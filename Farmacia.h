@@ -1,9 +1,9 @@
 //
-// Created by marco on 23/10/2025.
+// Created by admin on 21/10/2025.
 //
 
-#ifndef FARMACIA_H
-#define FARMACIA_H
+#ifndef PRACTICA3_FARMACIA_H
+#define PRACTICA3_FARMACIA_H
 #include <iostream>
 
 #include "Lista.h"
@@ -11,7 +11,9 @@
 #include "VDinamico.h"
 class MediExpress;
 
-
+/**
+ * @brief Definicion de la clase Farmacia
+ */
 class Farmacia {
 private:
     std::string cif_="-",provincia_="-",localidad_="-",
@@ -39,7 +41,7 @@ public:
     PaMedicamento *buscaMedicam(const int &ID);
     void pedidoMedicam(const int &ID);
     void dispensaMedicam(PaMedicamento *pa);
-    ListaEnlazada<Laboratorio*> buscarLabCompuesto(const std::string &nombre_PAmed);
+    VDinamico<Laboratorio*> buscarLabCompuesto(const std::string &nombre_PAmed);
 
     Farmacia &operator=(const Farmacia& orig);
     bool operator==(const Farmacia &orig) const;
@@ -48,4 +50,4 @@ public:
 };
 
 
-#endif //FARMACIA_H
+#endif //PRACTICA3_FARMACIA_H

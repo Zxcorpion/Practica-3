@@ -1,9 +1,10 @@
 //
-// Created by marco on 22/10/2025.
+// Created by admin on 21/10/2025.
 //
 
-#ifndef PAMEDICAMENTO_H
-#define PAMEDICAMENTO_H
+#ifndef PRACTICA3_PAMEDICAMENTO_H
+#define PRACTICA3_PAMEDICAMENTO_H
+
 
 #include <iostream>
 #include "Laboratorio.h"
@@ -40,7 +41,4 @@ public:
 };
 
 
-
-
-
-#endif //PAMEDICAMENTO_H
+#endif //PRACTICA3_PAMEDICAMENTO_H

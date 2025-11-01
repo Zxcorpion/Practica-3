@@ -274,12 +274,24 @@ int main() {
             labsOxido.insertarFinal(auxilio);
         }
     }
+//Ejercicio por parejas
+    VDinamico<Laboratorio*> labsVirus;
 
-    ListaEnlazada<Laboratorio*> labsVirus;
     for (int i = 0; i<27; i++) {
-        Farmacia *farmasVirus = medi.buscaFarmacia(vectorCIFS[i]);
+        Farmacia *farmasVirus = medi.buscaFarmacia(cif[i]); //Aqui buscamos la farmacia en el vector de cifs
+        if (farmasVirus != 0) {
+            VDinamico<Laboratorio*> aux = farmasVirus->buscarLabCompuesto("VIRUS");
+            //Introducimos los elementos en la lista gracias al auxiliar para no perder datos
+            for (int l = 0; l< aux.tamlog_(); l++) {
+                labsVirus.insertar(aux[l]);
+            }
+        }
     }
-    //labsVirus =
+    std::cout<<"Laboratorios que suministran medicamentos con virus"<<std::endl;
+    for (int j=0; j<labsVirus.tamlog_(); j++) {
+        std::cout<<"Nombre: "<<labsVirus[j]->getNomrbeLab()<<std::endl;
+    }
+
 
 
     return 0;

@@ -1,9 +1,7 @@
-//
-// Created by marco on 22/10/2025.
-//
 
-#ifndef LABORATORIO_H
-#define LABORATORIO_H
+#ifndef PRACTICA3_LABORATORIO_H
+#define PRACTICA3_LABORATORIO_H
+
 #include <iostream>
 
 class Laboratorio {
@@ -32,4 +30,5 @@ public:
 };
 
 
-#endif //LABORATORIO_H
+
+#endif //PRACTICA3_LABORATORIO_H

@@ -41656,6 +41656,7 @@ public:
     void setLocalidad(const std::string &localidad);
 };
 # 2 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Laboratorio.cpp" 2
+# 12 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Laboratorio.cpp"
 Laboratorio::Laboratorio(int id_, std::string nombreLab_, std::string direccion_, std::string codiPostal_,std::string localidad_):
 id(id_),
 nombreLab(nombreLab_),
@@ -41663,6 +41664,10 @@ direccion(direccion_),
 codiPostal(codiPostal_),
 localidad(localidad_)
 {}
+
+
+
+
 
 
 Laboratorio::Laboratorio(const Laboratorio &orig):
@@ -41673,43 +41678,79 @@ codiPostal(orig.codiPostal),
 localidad(orig.localidad)
 
 {}
+
+
+
+
+
 Laboratorio::~Laboratorio() {}
+
+
+
+
 
 int Laboratorio::getId() const {
     return id;
 }
 
+
+
+
 void Laboratorio::setId(int id) {
     Laboratorio::id = id;
 }
+
+
+
 
 const std::string &Laboratorio::getNomrbeLab() const {
     return nombreLab;
 }
 
+
+
+
 void Laboratorio::setNomrbeLab(const std::string &nomrbeLab) {
     Laboratorio::nombreLab = nomrbeLab;
 }
+
+
+
 
 const std::string &Laboratorio::getDireccion() const {
     return direccion;
 }
 
+
+
+
 void Laboratorio::setDireccion(const std::string &direccion) {
     Laboratorio::direccion = direccion;
 }
+
+
+
 
 const std::string &Laboratorio::getCodiPostal() const {
     return codiPostal;
 }
 
+
+
+
 void Laboratorio::setCodiPostal(const std::string &codiPostal) {
     Laboratorio::codiPostal = codiPostal;
 }
 
+
+
+
 const std::string &Laboratorio::getLocalidad() const {
     return localidad;
 }
+
+
+
 
 void Laboratorio::setLocalidad(const std::string &localidad) {
     Laboratorio::localidad = localidad;

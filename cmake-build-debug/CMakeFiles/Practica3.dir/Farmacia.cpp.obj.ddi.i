@@ -3,7 +3,6 @@
 # 0 "<built-in>"
 # 0 "<command-line>"
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.cpp"
-
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
 
 
@@ -41631,6 +41630,374 @@ namespace std
 
 }
 # 8 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
+
+# 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h" 1
+# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
+
+# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
+template<typename L>
+class ListaEnlazada {
+private:
+    template<typename N>
+    class Nodo {
+    public:
+        N dato;
+        Nodo *sig;
+
+        Nodo(N &_dato, Nodo *_sig=0):
+        dato(_dato), sig(_sig){}
+        ~Nodo(){}
+    };
+    Nodo<L> *cabecera, *cola;
+    int tam=0;
+    void limpia_lista();
+public:
+    template<typename I>
+    class Iterador {
+        Nodo<I> *nodo;
+    public:
+        friend class ListaEnlazada<I>;
+        Iterador(Nodo<I> *_nodo=0): nodo (_nodo){}
+        bool fin() {
+            return nodo==0;
+        }
+        void siguiente() {
+            nodo = nodo->sig;
+        }
+
+        Nodo<L> *get_nodo() const {return nodo;}
+        L &dato(){ return nodo->dato; }
+        L &operator*(){ return nodo->dato; }
+        ~Iterador(){}
+    };
+
+    ListaEnlazada() : cabecera(0), cola(0), tam(0) {}
+    ~ListaEnlazada();
+    ListaEnlazada(const ListaEnlazada<L> &origen);
+    ListaEnlazada &operator=(const ListaEnlazada<L> &origen);
+    Iterador<L> iterador() {return Iterador<L>(cabecera);}
+    void insertarinicio(L &dato);
+    void insertarFinal(L &dato);
+    void insertar_delante(Iterador<L> &i, L &dato);
+    void insertarDetras(Iterador<L> &i, L &dato);
+    void borrarInicio();
+    void borrarFinal();
+    void borrar(Iterador<L> &i);
+    int get_tam(){ return tam; }
+    L &inicio();
+    L &final();
+    ListaEnlazada<L> concatena(const ListaEnlazada<L> &origen);
+    ListaEnlazada<L> operator+(const ListaEnlazada<L> &origen);
+};
+
+
+
+
+
+
+
+template<typename L>
+ListaEnlazada<L>::ListaEnlazada(const ListaEnlazada<L> &origen)
+{
+cabecera = 0;
+cola = 0;
+    tam = origen.tam;
+    Nodo<L> *nodo = origen.cabecera;
+    while (nodo != 0) {
+        Nodo<L> *aux = new Nodo<L>(nodo->dato,0);
+        if (cola != 0) {
+            cola->sig = aux;
+        }
+        if (cabecera == 0) {
+            cabecera = aux;
+        }
+        cola = aux;
+        nodo = nodo->sig;
+    }
+}
+
+
+
+
+
+
+
+template<typename L>
+ListaEnlazada<L> &ListaEnlazada<L>::operator=(const ListaEnlazada<L> &origen) {
+    if(origen.cabecera != cabecera){
+            limpia_lista();
+
+        Nodo<L> *nodo = origen.cabecera;
+        cola=0;
+        cabecera=0;
+        tam=origen.tam;
+
+        while (nodo) {
+            Nodo<L> *nuevo = new Nodo<L>(nodo->dato,0);
+            if (cola != 0) {
+                cola->sig = nuevo;
+            }
+            if (cabecera == 0) {
+                cabecera = cola = nodo;
+                nodo = nodo->sig;
+            }
+        }
+
+    }
+    return *this;
+}
+
+
+
+
+
+
+template<typename L>
+L &ListaEnlazada<L>::inicio() {
+    if(cabecera==nullptr) {
+        throw std::invalid_argument("Error al acceder al primer elemento de la lista");
+    }
+    Iterador<L> i= cabecera;
+    return i.dato();
+}
+
+
+
+
+
+template<typename L>
+L &ListaEnlazada<L>::final() {
+    if(cola==nullptr) {
+        throw std::invalid_argument("Cola no existe");
+    }
+    Iterador<L> i= cola;
+    return i.dato();
+}
+
+
+
+
+
+
+template<typename L>
+void ListaEnlazada<L>::insertarinicio(L &dato) {
+    Nodo<L> *nuevo = new Nodo<L>(dato, cabecera);
+
+    if (cabecera == 0) {
+        cabecera = nuevo;
+        cola = nuevo;
+    }
+    cabecera = nuevo;
+    tam++;
+}
+
+
+
+
+
+
+template<typename L>
+void ListaEnlazada<L>::insertarFinal(L &dato) {
+    Nodo<L> *nuevo = new Nodo<L>(dato, 0);
+    if (cola != 0) {
+        cola->sig = nuevo;
+    }
+
+    if (cabecera == 0) {
+        cabecera = nuevo;
+    }
+        cola = nuevo;
+        tam++;
+}
+# 192 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
+template<typename L>
+void ListaEnlazada<L>::insertarDetras(Iterador<L> &i, L &dato) {
+    Nodo<L> *nuevo = new Nodo<L>(dato, i.nodo->sig);
+    i.nodo->sig=nuevo;
+    if(cola==i.nodo) {
+        cola=nuevo;
+    }
+    tam++;
+}
+
+
+
+
+
+
+
+template<typename L>
+void ListaEnlazada<L>::insertar_delante(Iterador<L> &i, L &dato) {
+    Nodo<L> *nuevo = new Nodo<L>(dato, i.nodo);
+    if(i.nodo==cabecera) {
+        cabecera = nuevo;
+    }else {
+    Nodo<L> *anterior= 0;
+        anterior=cabecera;
+        while(anterior->sig != i.nodo) {
+            anterior = anterior->sig;
+        }
+        anterior->sig=nuevo;
+    }
+    if(cabecera==0) {
+        cola = cabecera = nuevo;
+    }
+    tam++;
+}
+
+
+
+
+
+
+template<typename L>
+void ListaEnlazada<L>::borrarInicio(){
+    if (cabecera == 0) {
+       throw std::invalid_argument("Error al borrar por el principio, la lista está vacia");
+    }
+    Nodo<L> *borrado = cabecera;
+    cabecera = cabecera->sig;
+    delete borrado;
+
+    if (cabecera == 0) {
+        cola=0;
+    }
+    tam--;
+}
+
+
+
+
+
+template<typename L>
+void ListaEnlazada<L>::borrarFinal(){
+    Nodo<L> *borrado = 0;
+    if(cabecera != cola) {
+        borrado=cabecera;
+        while(borrado->sig != cola) {
+            borrado=borrado->sig;
+        }
+    }
+    delete cola;
+    cola=borrado;
+    if(borrado != 0) {
+        borrado->sig=0;
+    }else {
+        cabecera=0;
+    }
+    tam--;
+}
+# 278 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
+template<typename L>
+void ListaEnlazada<L>::borrar(Iterador<L> &i) {
+    if (cabecera == 0) {
+        throw std::invalid_argument("Error al borrar mediante iterador, no se puede borrar un nodo de una lista vacia");
+    }
+    if (i.nodo == 0) {
+        throw std::invalid_argument("Error al borrar mediante iterador, no se puede borrar nullptr");
+
+    }
+
+    if(i.nodo == cabecera) {
+        borrarInicio();
+        return;
+    }
+    if(i.nodo == cola){
+        borrarFinal();
+        return;
+    }
+
+    Nodo<L> *anterior = 0;
+    if(cabecera != cola) {
+        anterior=cabecera;
+        while(anterior->sig != i.nodo && anterior != 0) {
+            anterior=anterior->sig;
+        }
+    }
+    if (anterior == 0 || anterior->sig == 0) {
+        throw std::invalid_argument("Error al borrar mediante iterador, se ha seleccionado un nodo invalido");
+
+    }
+    Nodo<L> *borrado = anterior->sig;
+    anterior->sig = borrado->sig;
+    i.nodo = borrado->sig;
+    delete borrado;
+    tam--;
+# 352 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
+}
+
+
+
+
+
+template<typename L>
+ListaEnlazada<L>::~ListaEnlazada() {
+    while(cabecera != 0){
+        Nodo<L> *aux = cabecera;
+        cabecera = cabecera->sig;
+        delete aux;
+    }
+}
+
+
+
+
+
+
+template<typename L>
+void ListaEnlazada<L>::limpia_lista() {
+    if(cabecera == 0) {
+        throw std::invalid_argument("No hay nada que limpiar");
+    }
+    Nodo<L> *aux = 0;
+        while(cabecera != 0){
+            aux = cabecera;
+            cabecera = cabecera->sig;
+            delete aux;
+    }
+    cola = 0;
+    tam=0;
+}
+
+
+
+
+
+
+
+template<typename L>
+ListaEnlazada<L> ListaEnlazada<L>::concatena(const ListaEnlazada<L> &origen) {
+    ListaEnlazada<L> nueva;
+    Nodo<L> *aux = cabecera;
+    while(aux != 0) {
+        nueva.insertarFinal(aux->dato);
+        aux=aux->sig;
+    }
+    aux=origen.cabecera;
+    while(aux != 0) {
+        nueva.insertarFinal(aux->dato);
+        aux=aux->sig;
+    }
+    return nueva;
+}
+
+
+
+
+
+
+
+template<typename L>
+ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
+    this->cola = origen.cabecera;
+    Nodo<L> *aux = origen.cabecera;
+    while(aux != 0) {
+        this->insertarFinal(aux->dato);
+        aux=aux->sig;
+    }
+    return this;
+}
+# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/PaMedicamento.h" 1
 # 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/PaMedicamento.h"
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Laboratorio.h" 1
@@ -41640,8 +42007,6 @@ namespace std
 
 
 
-
-# 7 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Laboratorio.h"
 class Laboratorio {
 private:
     int id = 0;
@@ -41698,7 +42063,7 @@ public:
     bool operator<(const PaMedicamento &orig) const;
     bool operator==(const PaMedicamento &orig) const;
 };
-# 9 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
+# 11 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/VDinamico.h" 1
 
 
@@ -60325,8 +60690,10 @@ int VDinamico<T>::busquedaBinaria(T &d) {
     }
     return -1;
 }
-# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
+# 12 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 2
 class MediExpress;
+
+
 
 
 class Farmacia {
@@ -60356,13 +60723,14 @@ public:
     PaMedicamento *buscaMedicam(const int &ID);
     void pedidoMedicam(const int &ID);
     void dispensaMedicam(PaMedicamento *pa);
+    VDinamico<Laboratorio*> buscarLabCompuesto(const std::string &nombre_PAmed);
 
     Farmacia &operator=(const Farmacia& orig);
     bool operator==(const Farmacia &orig) const;
     bool operator<(const Farmacia &orig) const;
     bool operator>(const Farmacia &orig) const;
 };
-# 3 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.cpp" 2
+# 2 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.cpp" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 1
 
 
@@ -64291,13 +64659,9 @@ namespace std
 # 12 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/AVL.h" 1
+# 9 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/AVL.h"
 
-
-
-
-
-
-# 6 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/AVL.h"
+# 9 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/AVL.h"
 template<typename U>
 class NodoA {
     public:
@@ -64306,7 +64670,8 @@ class NodoA {
     char bal;
     NodoA(): izq(0), der(0), dato(0),bal(0) {}
     NodoA(U &ele): izq(0), der(0),dato(ele),bal(0){}
-    NodoA(const U &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
+    NodoA(const U &orig): izq(orig.izq), der(orig.der),
+    dato(orig.dato),bal(orig.bal){}
 };
 template<typename A>
 class AVL {
@@ -64567,377 +64932,7 @@ A *AVL<A>::buscaIterativa(A &dato, NodoA<A> *p) {
     return 0;
 }
 # 14 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
-
-
-
-# 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h" 1
-# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
-template<typename L>
-class ListaEnlazada {
-private:
-    template<typename N>
-    class Nodo {
-    public:
-        N dato;
-        Nodo *sig;
-
-        Nodo(N &_dato, Nodo *_sig=0):
-        dato(_dato), sig(_sig){}
-        ~Nodo(){}
-    };
-    Nodo<L> *cabecera, *cola;
-    int tam=0;
-    void limpia_lista();
-public:
-    template<typename I>
-    class Iterador {
-        Nodo<I> *nodo;
-    public:
-        friend class ListaEnlazada<I>;
-        Iterador(Nodo<I> *_nodo=0): nodo (_nodo){}
-        bool fin() {
-            return nodo==0;
-        }
-        void siguiente() {
-            nodo = nodo->sig;
-        }
-
-        Nodo<L> *get_nodo() const {return nodo;}
-        L &dato(){ return nodo->dato; }
-        L &operator*(){ return nodo->dato; }
-        ~Iterador(){}
-    };
-
-    ListaEnlazada() : cabecera(0), cola(0), tam(0) {}
-    ~ListaEnlazada();
-    ListaEnlazada(const ListaEnlazada<L> &origen);
-    ListaEnlazada &operator=(const ListaEnlazada<L> &origen);
-    Iterador<L> iterador() {return Iterador<L>(cabecera);}
-    void insertarinicio(L &dato);
-    void insertarFinal(L &dato);
-    void insertar_delante(Iterador<L> &i, L &dato);
-    void insertarDetras(Iterador<L> &i, L &dato);
-    void borrarInicio();
-    void borrarFinal();
-    void borrar(Iterador<L> &i);
-    int get_tam(){ return tam; }
-    L &inicio();
-    L &final();
-    ListaEnlazada<L> concatena(const ListaEnlazada<L> &origen);
-    ListaEnlazada<L> operator+(const ListaEnlazada<L> &origen);
-};
-
-
-
-
-
-
-
-template<typename L>
-ListaEnlazada<L>::ListaEnlazada(const ListaEnlazada<L> &origen)
-{
-cabecera = 0;
-cola = 0;
-    tam = origen.tam;
-    Nodo<L> *nodo = origen.cabecera;
-    while (nodo != 0) {
-        Nodo<L> *aux = new Nodo<L>(nodo->dato,0);
-        if (cola != 0) {
-            cola->sig = aux;
-        }
-        if (cabecera == 0) {
-            cabecera = aux;
-        }
-        cola = aux;
-        nodo = nodo->sig;
-    }
-}
-
-
-
-
-
-
-
-template<typename L>
-ListaEnlazada<L> &ListaEnlazada<L>::operator=(const ListaEnlazada<L> &origen) {
-    if(origen.cabecera != cabecera){
-            limpia_lista();
-
-        Nodo<L> *nodo = origen.cabecera;
-        cola=0;
-        cabecera=0;
-        tam=origen.tam;
-
-        while (nodo) {
-            Nodo<L> *nuevo = new Nodo<L>(nodo->dato,0);
-            if (cola != 0) {
-                cola->sig = nuevo;
-            }
-            if (cabecera == 0) {
-                cabecera = cola = nodo;
-                nodo = nodo->sig;
-            }
-        }
-
-    }
-    return *this;
-}
-
-
-
-
-
-
-template<typename L>
-L &ListaEnlazada<L>::inicio() {
-    if(cabecera==nullptr) {
-        throw std::invalid_argument("Error al acceder al primer elemento de la lista");
-    }
-    Iterador<L> i= cabecera;
-    return i.dato();
-}
-
-
-
-
-
-template<typename L>
-L &ListaEnlazada<L>::final() {
-    if(cola==nullptr) {
-        throw std::invalid_argument("Cola no existe");
-    }
-    Iterador<L> i= cola;
-    return i.dato();
-}
-
-
-
-
-
-
-template<typename L>
-void ListaEnlazada<L>::insertarinicio(L &dato) {
-    Nodo<L> *nuevo = new Nodo<L>(dato, cabecera);
-
-    if (cabecera == 0) {
-        cabecera = nuevo;
-        cola = nuevo;
-    }
-    cabecera = nuevo;
-    tam++;
-}
-
-
-
-
-
-
-template<typename L>
-void ListaEnlazada<L>::insertarFinal(L &dato) {
-    Nodo<L> *nuevo = new Nodo<L>(dato, 0);
-    if (cola != 0) {
-        cola->sig = nuevo;
-    }
-
-    if (cabecera == 0) {
-        cabecera = nuevo;
-    }
-        cola = nuevo;
-        tam++;
-}
-# 192 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
-template<typename L>
-void ListaEnlazada<L>::insertarDetras(Iterador<L> &i, L &dato) {
-    Nodo<L> *nuevo = new Nodo<L>(dato, i.nodo->sig);
-    i.nodo->sig=nuevo;
-    if(cola==i.nodo) {
-        cola=nuevo;
-    }
-    tam++;
-}
-
-
-
-
-
-
-
-template<typename L>
-void ListaEnlazada<L>::insertar_delante(Iterador<L> &i, L &dato) {
-    Nodo<L> *nuevo = new Nodo<L>(dato, i.nodo);
-    if(i.nodo==cabecera) {
-        cabecera = nuevo;
-    }else {
-    Nodo<L> *anterior= 0;
-        anterior=cabecera;
-        while(anterior->sig != i.nodo) {
-            anterior = anterior->sig;
-        }
-        anterior->sig=nuevo;
-    }
-    if(cabecera==0) {
-        cola = cabecera = nuevo;
-    }
-    tam++;
-}
-
-
-
-
-
-
-template<typename L>
-void ListaEnlazada<L>::borrarInicio(){
-    if (cabecera == 0) {
-       throw std::invalid_argument("Error al borrar por el principio, la lista está vacia");
-    }
-    Nodo<L> *borrado = cabecera;
-    cabecera = cabecera->sig;
-    delete borrado;
-
-    if (cabecera == 0) {
-        cola=0;
-    }
-    tam--;
-}
-
-
-
-
-
-template<typename L>
-void ListaEnlazada<L>::borrarFinal(){
-    Nodo<L> *borrado = 0;
-    if(cabecera != cola) {
-        borrado=cabecera;
-        while(borrado->sig != cola) {
-            borrado=borrado->sig;
-        }
-    }
-    delete cola;
-    cola=borrado;
-    if(borrado != 0) {
-        borrado->sig=0;
-    }else {
-        cabecera=0;
-    }
-    tam--;
-}
-# 278 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
-template<typename L>
-void ListaEnlazada<L>::borrar(Iterador<L> &i) {
-    if (cabecera == 0) {
-        throw std::invalid_argument("Error al borrar mediante iterador, no se puede borrar un nodo de una lista vacia");
-    }
-    if (i.nodo == 0) {
-        throw std::invalid_argument("Error al borrar mediante iterador, no se puede borrar nullptr");
-
-    }
-
-    if(i.nodo == cabecera) {
-        borrarInicio();
-        return;
-    }
-    if(i.nodo == cola){
-        borrarFinal();
-        return;
-    }
-
-    Nodo<L> *anterior = 0;
-    if(cabecera != cola) {
-        anterior=cabecera;
-        while(anterior->sig != i.nodo && anterior != 0) {
-            anterior=anterior->sig;
-        }
-    }
-    if (anterior == 0 || anterior->sig == 0) {
-        throw std::invalid_argument("Error al borrar mediante iterador, se ha seleccionado un nodo invalido");
-
-    }
-    Nodo<L> *borrado = anterior->sig;
-    anterior->sig = borrado->sig;
-    i.nodo = borrado->sig;
-    delete borrado;
-    tam--;
-# 352 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Lista.h"
-}
-
-
-
-
-
-template<typename L>
-ListaEnlazada<L>::~ListaEnlazada() {
-    while(cabecera != 0){
-        Nodo<L> *aux = cabecera;
-        cabecera = cabecera->sig;
-        delete aux;
-    }
-}
-
-
-
-
-
-
-template<typename L>
-void ListaEnlazada<L>::limpia_lista() {
-    if(cabecera == 0) {
-        throw std::invalid_argument("No hay nada que limpiar");
-    }
-    Nodo<L> *aux = 0;
-        while(cabecera != 0){
-            aux = cabecera;
-            cabecera = cabecera->sig;
-            delete aux;
-    }
-    cola = 0;
-    tam=0;
-}
-
-
-
-
-
-
-
-template<typename L>
-ListaEnlazada<L> ListaEnlazada<L>::concatena(const ListaEnlazada<L> &origen) {
-    ListaEnlazada<L> nueva;
-    Nodo<L> *aux = cabecera;
-    while(aux != 0) {
-        nueva.insertarFinal(aux->dato);
-        aux=aux->sig;
-    }
-    aux=origen.cabecera;
-    while(aux != 0) {
-        nueva.insertarFinal(aux->dato);
-        aux=aux->sig;
-    }
-    return nueva;
-}
-
-
-
-
-
-
-
-template<typename L>
-ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
-    this->cola = origen.cabecera;
-    Nodo<L> *aux = origen.cabecera;
-    while(aux != 0) {
-        this->insertarFinal(aux->dato);
-        aux=aux->sig;
-    }
-    return this;
-}
-# 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
-
-
-
+# 24 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h"
 class MediExpress {
 private:
     VDinamico<PaMedicamento> medication;
@@ -64967,17 +64962,23 @@ public:
     Farmacia* buscaFarmacia(const std::string &nombreFar);
 
 };
-# 4 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.cpp" 2
-Farmacia::Farmacia(std::string cif,std::string provincia,std::string localidad,
-    std::string nombre,std::string direccion,std::string codPostal, MediExpress* link):
+# 3 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.cpp" 2
+# 15 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.cpp"
+Farmacia::Farmacia(std::string cif, std::string provincia, std::string localidad,
+                   std::string nombre, std::string direccion, std::string codPostal, MediExpress *link):
 cif_(cif),
 provincia_(provincia),
 localidad_(localidad),
 nombre_(nombre),
 direccion_(direccion),
 codPostal_(codPostal),
-linkMedi(link)
-{}
+linkMedi(link) {
+}
+
+
+
+
+
 
 Farmacia::Farmacia(const Farmacia &orig):
 cif_(orig.cif_),
@@ -64989,84 +64990,157 @@ codPostal_(orig.codPostal_),
 linkMedi(orig.linkMedi)
 {}
 
+
+
+
+
 Farmacia::~Farmacia() {
     linkMedi = 0;
 }
+
+
+
 
 std::string Farmacia::get_cif() const {
     return cif_;
 }
 
+
+
+
 void Farmacia::set_cif(const std::string &cif) {
     cif_ = cif;
 }
+
+
+
 
 std::string Farmacia::get_provincia() const {
     return provincia_;
 }
 
+
+
+
 void Farmacia::set_provincia(const std::string &provincia) {
     provincia_ = provincia;
 }
+
+
+
 
 std::string Farmacia::get_localidad() const {
     return localidad_;
 }
 
+
+
+
 void Farmacia::set_localidad(const std::string &localidad) {
     localidad_ = localidad;
 }
+
+
+
 
 std::string Farmacia::get_nombre() const {
     return nombre_;
 }
 
+
+
+
 void Farmacia::set_nombre(const std::string &nombre) {
     nombre_ = nombre;
 }
+
+
+
 
 std::string Farmacia::get_direccion() const {
     return direccion_;
 }
 
+
+
+
 void Farmacia::set_direccion(const std::string &direccion) {
     direccion_ = direccion;
 }
+
+
+
 
 std::string Farmacia::get_cod_postal() const {
     return codPostal_;
 }
 
+
+
+
 void Farmacia::set_cod_postal(const std::string &cod_postal) {
     codPostal_ = cod_postal;
 }
+
+
+
+
+
+
+
 Farmacia &Farmacia::operator=(const Farmacia &orig) {
-    if (this!=&orig) {
-        cif_=orig.cif_;
-        provincia_=orig.provincia_;
-        localidad_=orig.localidad_;
-        nombre_=orig.nombre_;
-        direccion_=orig.direccion_;
-        codPostal_=orig.codPostal_;
+    if (this != &orig) {
+        cif_ = orig.cif_;
+        provincia_ = orig.provincia_;
+        localidad_ = orig.localidad_;
+        nombre_ = orig.nombre_;
+        direccion_ = orig.direccion_;
+        codPostal_ = orig.codPostal_;
     }
     return *this;
 }
-bool Farmacia::operator<(const Farmacia &orig) const{
+
+
+
+
+
+
+bool Farmacia::operator<(const Farmacia &orig) const {
     return cif_ < orig.cif_;
 }
-bool Farmacia::operator==(const Farmacia &orig) const{
+
+
+
+
+
+bool Farmacia::operator==(const Farmacia &orig) const {
     return cif_ == orig.cif_;
 }
+
+
+
+
+
 bool Farmacia::operator>(const Farmacia &orig) const {
     return cif_ > orig.cif_;
 }
+
+
+
+
 
 
 void Farmacia::pedidoMedicam(const int &ID) {
     linkMedi->suministrarFarmacia(this, ID);
 }
 
-PaMedicamento* Farmacia::buscaMedicam(const int &ID) {
+
+
+
+
+
+
+PaMedicamento *Farmacia::buscaMedicam(const int &ID) {
     for (int i = 0; i < dispense.tamlog_(); i++) {
         if (ID == dispense[i]->get_id_num()) {
             return dispense[i];
@@ -65077,9 +65151,32 @@ PaMedicamento* Farmacia::buscaMedicam(const int &ID) {
     return 0;
 }
 
+
+
+
+
+
 void Farmacia::dispensaMedicam(PaMedicamento *pa) {
     if (pa->get_id_num() == 0) {
         throw std::invalid_argument("Error en dispensa:medicamento invalido");
     }
-        dispense.insertar(pa);
+    dispense.insertar(pa);
+}
+
+
+
+
+
+
+VDinamico<Laboratorio*> Farmacia::buscarLabCompuesto(const std::string &nombre_PAmed) {
+    VDinamico<Laboratorio *> listaWayne;
+    for (int i = 0; i < this->dispense.tamlog_(); i++) {
+        PaMedicamento *med = dispense[i];
+        if (med && med->get_nombre().find(nombre_PAmed) != std::string::npos) {
+            Laboratorio *aux = med->getServe();
+            if (aux)
+                listaWayne.insertar(aux);
+        }
+    }
+    return listaWayne;
 }

@@ -64177,6 +64177,9 @@ int VDinamico<T>::busquedaBinaria(T &d) {
 # 4 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/AVL.h" 2
 
 
+
+
+
 template<typename U>
 class NodoA {
     public:
@@ -64185,7 +64188,8 @@ class NodoA {
     char bal;
     NodoA(): izq(0), der(0), dato(0),bal(0) {}
     NodoA(U &ele): izq(0), der(0),dato(ele),bal(0){}
-    NodoA(const U &orig): izq(orig.izq), der(orig.der), dato(orig.dato),bal(orig.bal){}
+    NodoA(const U &orig): izq(orig.izq), der(orig.der),
+    dato(orig.dato),bal(orig.bal){}
 };
 template<typename A>
 class AVL {
@@ -64880,8 +64884,10 @@ ListaEnlazada<L> ListaEnlazada<L>::operator+(const ListaEnlazada<L> &origen) {
 }
 # 18 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
 # 1 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h" 1
-# 10 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
+# 12 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/Farmacia.h"
 class MediExpress;
+
+
 
 
 class Farmacia {
@@ -64911,6 +64917,7 @@ public:
     PaMedicamento *buscaMedicam(const int &ID);
     void pedidoMedicam(const int &ID);
     void dispensaMedicam(PaMedicamento *pa);
+    VDinamico<Laboratorio*> buscarLabCompuesto(const std::string &nombre_PAmed);
 
     Farmacia &operator=(const Farmacia& orig);
     bool operator==(const Farmacia &orig) const;
@@ -64918,6 +64925,9 @@ public:
     bool operator>(const Farmacia &orig) const;
 };
 # 19 "C:/Users/pablo/Downloads/Segundo Curso/Estructuras/Practicas/Practica3/MediExpress.h" 2
+
+
+
 
 
 class MediExpress {
@@ -65226,19 +65236,19 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
 
 
-    int k=0;
+    int indiceBucle=0;
     for (int i= 0; i<vectorCIFS.tamlog_();i++) {
         Farmacia farmaciaInsercion;
         farmaciaInsercion.set_cif(vectorCIFS[i]);
-        Farmacia *aux = pharmacy.buscaRec(farmaciaInsercion);
-        int c=0;
-        while (c<100) {
-            suministrarFarmacia(aux,medication[k].get_id_num());
-            if (k==medication.tamlog_()-1) {
-                k=0;
+        Farmacia *farmacia_auxiliar = pharmacy.buscaRec(farmaciaInsercion);
+        int contador=0;
+        while (contador<100) {
+            suministrarFarmacia(farmacia_auxiliar,medication[indiceBucle].get_id_num());
+            if (indiceBucle==medication.tamlog_()-1) {
+                indiceBucle=0;
             }else {
-                k++;
-                c++;
+                indiceBucle++;
+                contador++;
             }
         }
     }
@@ -65251,7 +65261,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
 
 MediExpress::MediExpress(const MediExpress &orig):
-medication(orig.medication),labs(orig.labs)
+medication(orig.medication),labs(orig.labs), pharmacy(orig.pharmacy)
 {}
 
 
@@ -65263,6 +65273,7 @@ MediExpress &MediExpress::operator=(const MediExpress &orig) {
     if(this!=&orig) {
         medication = orig.medication;
         labs = orig.labs;
+        pharmacy = orig.pharmacy;
     }
     return *this;
 }
@@ -65397,15 +65408,24 @@ void MediExpress::borrarLaboratorio(const std::string &nombreCiudad) {
     }
 }
 
+
+
+
+
+
+
 PaMedicamento *MediExpress::buscaCompuesto(const int &ID_) {
-    PaMedicamento auxiliar;
     for(unsigned int i=0;i<medication.tamlog_();i++) {
         if(medication[i].get_id_num() == ID_) {
-            return &auxiliar;
+            return &medication[i];
         }
     }
     return 0;
 }
+
+
+
+
 
 
 void MediExpress::suministrarFarmacia(Farmacia *farma, int ID_) {
@@ -65417,11 +65437,21 @@ void MediExpress::suministrarFarmacia(Farmacia *farma, int ID_) {
     }
 }
 
+
+
+
+
+
 Farmacia *MediExpress::buscaFarmacia(const std::string &cif_) {
     Farmacia auxiliar;
     auxiliar.set_cif(cif_);
     return pharmacy.buscaRec(auxiliar);
 }
+
+
+
+
+
 
 ListaEnlazada<Laboratorio*> MediExpress::buscarLabs(const std::string &nombrePA) {
    ListaEnlazada<Laboratorio*> lista;

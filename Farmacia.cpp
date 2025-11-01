@@ -1,28 +1,26 @@
-//
-// Created by marco on 23/10/2025.
-//
 #include "Farmacia.h"
 #include "MediExpress.h"
 
 /**
- *
- * @param cif @bief Constructor por defecto y parametrizado
- * @param provincia
- * @param localidad
- * @param nombre
- * @param direccion
- * @param codPostal
- * @param link
+ * @brief Constructor por defecto y parametrizado
+ * @param cif CIF de la farmacia
+ * @param provincia Provincia donde se encuantra la farmacia
+ * @param localidad Localidad donde se encuantra la farmacia
+ * @param nombre Nombre de la farmacia
+ * @param direccion Direccion de la farmacia
+ * @param codPostal Codigo postal de la farmacia
+ * @param link Atributo que asocia una farmacia con MediExpress
  * @post Se crea un objeto Farmacia con los atributos pasados por cabecera
  */
 Farmacia::Farmacia(std::string cif, std::string provincia, std::string localidad,
-                   std::string nombre, std::string direccion, std::string codPostal, MediExpress *link): cif_(cif),
-                                                                                                         provincia_(provincia),
-                                                                                                         localidad_(localidad),
-                                                                                                         nombre_(nombre),
-                                                                                                         direccion_(direccion),
-                                                                                                         codPostal_(codPostal),
-                                                                                                         linkMedi(link) {
+                   std::string nombre, std::string direccion, std::string codPostal, MediExpress *link):
+cif_(cif),
+provincia_(provincia),
+localidad_(localidad),
+nombre_(nombre),
+direccion_(direccion),
+codPostal_(codPostal),
+linkMedi(link) {
 }
 
 /**
@@ -30,14 +28,15 @@ Farmacia::Farmacia(std::string cif, std::string provincia, std::string localidad
  * @param orig Objeto Farmacia que vamos a copiar
  * @post Se crea un objeto Farmacia asignando a sus atributos los valores de los atributos orig pasado por cabecera
  */
-Farmacia::Farmacia(const Farmacia &orig): cif_(orig.cif_),
-                                          provincia_(orig.provincia_),
-                                          localidad_(orig.localidad_),
-                                          nombre_(orig.nombre_),
-                                          direccion_(orig.direccion_),
-                                          codPostal_(orig.codPostal_),
-                                          linkMedi(orig.linkMedi) {
-}
+Farmacia::Farmacia(const Farmacia &orig):
+cif_(orig.cif_),
+provincia_(orig.provincia_),
+localidad_(orig.localidad_),
+nombre_(orig.nombre_),
+direccion_(orig.direccion_),
+codPostal_(orig.codPostal_),
+linkMedi(orig.linkMedi)
+{}
 
 /**
  * @brief Destructor de Farmacia
@@ -55,7 +54,7 @@ std::string Farmacia::get_cif() const {
 }
 /**
  * @brief Función para establecer un  cif_
- * @param string cif nuevo valor al atributo cif_
+ * @param cif nuevo valor al atributo cif_
  */
 void Farmacia::set_cif(const std::string &cif) {
     cif_ = cif;
@@ -69,7 +68,7 @@ std::string Farmacia::get_provincia() const {
 }
 /**
  * @brief Función para establecer un provincia_
- * @param string provincia nuevo valor al atributo provincia_
+ * @param provincia nuevo valor al atributo provincia_
  */
 void Farmacia::set_provincia(const std::string &provincia) {
     provincia_ = provincia;
@@ -83,7 +82,7 @@ std::string Farmacia::get_localidad() const {
 }
 /**
  * @brief Función para establecer un localidad_
- * @param string localidad nuevo valor al atributo localidad_
+ * @param localidad nuevo valor al atributo localidad_
  */
 void Farmacia::set_localidad(const std::string &localidad) {
     localidad_ = localidad;
@@ -97,7 +96,7 @@ std::string Farmacia::get_nombre() const {
 }
 /**
  * @brief Función para establecer un nombre_
- * @param string nombre nuevo valor al atributo nombre_
+ * @param nombre nuevo valor al atributo nombre_
  */
 void Farmacia::set_nombre(const std::string &nombre) {
     nombre_ = nombre;
@@ -111,7 +110,7 @@ std::string Farmacia::get_direccion() const {
 }
 /**
  * @brief Función para establecer un codigo direccion_
- * @param string direccion nuevo valor al atributo direccion_
+ * @param direccion nuevo valor al atributo direccion_
  */
 void Farmacia::set_direccion(const std::string &direccion) {
     direccion_ = direccion;
@@ -125,7 +124,7 @@ std::string Farmacia::get_cod_postal() const {
 }
 /**
  * @brief Función para establecer un codigo postal
- * @param string cod_postal nuevo valor al atributo codpostal_
+ * @param cod_postal nuevo valor al atributo codpostal_
  */
 void Farmacia::set_cod_postal(const std::string &cod_postal) {
     codPostal_ = cod_postal;
@@ -134,7 +133,7 @@ void Farmacia::set_cod_postal(const std::string &cod_postal) {
 /**
  * @brief Operador de asignacion de la clase Farmacia
  * @param orig  Objeto que usamos de referencia para asignar valores a nuestro objeto
- * @return *this puntero de nuestro objeto
+ * @return Farmacia con los atributos de otra farmacia
  * @post Objeto this cambia los valores de sus atributos
  */
 Farmacia &Farmacia::operator=(const Farmacia &orig) {
@@ -150,7 +149,7 @@ Farmacia &Farmacia::operator=(const Farmacia &orig) {
 }
 
 /**
- * @brief Operador menor qué
+ * @brief Operador <
  * @param orig Objeto pasado por referencia
  * @return bool si this->cif_ es menor al de orig
  */
@@ -158,7 +157,7 @@ bool Farmacia::operator<(const Farmacia &orig) const {
     return cif_ < orig.cif_;
 }
 /**
- * @brief Operador de comparacion
+ * @brief Operador ==
  * @param orig Objeto pasado por referencia
  * @return bool si this->cif_ es igual al de orig
  */
@@ -166,7 +165,7 @@ bool Farmacia::operator==(const Farmacia &orig) const {
     return cif_ == orig.cif_;
 }
 /**
- * @brief Operador mayor qué
+ * @brief Operador >
  * @param orig Objeto pasado por referencia
  * @return bool si this->cif_ es mayor al de orig
  */
@@ -176,16 +175,18 @@ bool Farmacia::operator>(const Farmacia &orig) const {
 
 /**
  * @brief Funcion para pedir un medicamento
- * @param int ID pasado por referencia
+ * @param ID Id del PAmedicamento a buscar
+ * @post La farmacia es suministrada con un nuevo PAmedicamento
  */
 void Farmacia::pedidoMedicam(const int &ID) {
     linkMedi->suministrarFarmacia(this, ID);
 }
 
 /**
- * @brief Fucnion para encontrar un medicamento
- * @param ID
- * @return Puntero de Pamedicamento
+ * @brief Fucnion para encontrar un medicamento segun su ID
+ * @param ID del PAmedicamento a buscar
+ * @return PAmedicamento a buscar segun su ID
+ * @post El PAmedicamento a buscar es devuelto, en casod e no encontrarlo se devuelve nullptr
  */
 PaMedicamento *Farmacia::buscaMedicam(const int &ID) {
     for (int i = 0; i < dispense.tamlog_(); i++) {
@@ -200,7 +201,8 @@ PaMedicamento *Farmacia::buscaMedicam(const int &ID) {
 
 /**
  * @brief Funcion para que una farmacia sirva un PaMedicamento
- * @param pa puntero PaMedicamento
+ * @param pa PaMedicamento que se añade a una farmacia
+ * @post La farmacia tiene un nuevo PAmedicamento añadido
  */
 void Farmacia::dispensaMedicam(PaMedicamento *pa) {
     if (pa->get_id_num() == 0) {
@@ -210,20 +212,19 @@ void Farmacia::dispensaMedicam(PaMedicamento *pa) {
 }
 
 /**
- * @brief Funcion para buscar medicamentos y meter en una lista los laboratorios que usan esos PaMedicamentos
- * @param string nombre_PAmed
- * @return listaWayne ListaEnlazada<Laboratorio *>
+ * @brief Funcion para buscar medicamentos y meterl en una lista los laboratorios que usan esos PaMedicamentos
+ * @param  nombre_PAmed
+ * @return Devuelve una lista con todos los laboratorios que tienen un determinado PAmedicamento
  */
-ListaEnlazada<Laboratorio *> Farmacia::buscarLabCompuesto(const std::string &nombre_PAmed) {
-    ListaEnlazada<Laboratorio *> listaWayne;
+VDinamico<Laboratorio*> Farmacia::buscarLabCompuesto(const std::string &nombre_PAmed) {
+    VDinamico<Laboratorio *> listaWayne;
     for (int i = 0; i < this->dispense.tamlog_(); i++) {
         PaMedicamento *med = dispense[i];
         if (med && med->get_nombre().find(nombre_PAmed) != std::string::npos) {
             Laboratorio *aux = med->getServe();
             if (aux)
-                listaWayne.insertarFinal(aux);
+                listaWayne.insertar(aux);
         }
     }
     return listaWayne;
 }
-

@@ -1,6 +1,3 @@
-//
-// Created by marco on 22/10/2025.
-//
 #include "MediExpress.h"
 
 /**
@@ -14,8 +11,7 @@ medication(),labs(),pharmacy() {
 /**
  * @brief Constructor parametrizado de la clase MediExpress
  * @param medicamentos pasados por referencia
- * @param laboratorios pasados por referencia
- * @param farmacias pasadas por referencia
+ * @param laboratorios pasador por referencia
  * @post Se crea un objeto de la clase MediExpress con los valores pasados por cabecera, que son leidos de varios ficheros .csv
  */
 MediExpress::MediExpress(const std::string &medicamentos, const std::string &laboratorios, const std::string &farmacias) {
@@ -144,7 +140,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
         std::cout << "Error de apertura en archivo" << std::endl;
     }
 
-    //Insertar
+    //Enlazamos cada laboratorio con 2 PAmedicamentos
     ListaEnlazada<Laboratorio>::Iterador<Laboratorio> itLaboratorio = labs.iterador();
     int tam = 0;
 
@@ -171,7 +167,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
     for (int i = 0; i < medSin.tamlog_(); i++) {
         medSin[i]->servidoPor(labsMadrid[i]);
-    }/*
+    }/* Comprobamos que ya no hay PAmedicamentos sin laboratorio asignado
     int cont2=0;
     for (int i=0; i<medication.tamlog_(); i++) {
         if (!medication[i].getServe()) {
@@ -283,19 +279,19 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
 
 
     //Aniadimos todos los cifs a cada farmacia
-    int k=0;
+    int indiceBucle=0;
     for (int i= 0; i<vectorCIFS.tamlog_();i++) {
         Farmacia farmaciaInsercion;
         farmaciaInsercion.set_cif(vectorCIFS[i]);
-        Farmacia *aux = pharmacy.buscaRec(farmaciaInsercion);
-        int c=0;
-        while (c<100) {
-            suministrarFarmacia(aux,medication[k].get_id_num());
-            if (k==medication.tamlog_()-1) {
-                k=0;
+        Farmacia *farmacia_auxiliar = pharmacy.buscaRec(farmaciaInsercion);
+        int contador=0;
+        while (contador<100) {
+            suministrarFarmacia(farmacia_auxiliar,medication[indiceBucle].get_id_num());
+            if (indiceBucle==medication.tamlog_()-1) {
+                indiceBucle=0;
             }else {
-                k++;
-                c++;
+                indiceBucle++;
+                contador++;
             }
         }
     }
@@ -308,7 +304,7 @@ MediExpress::MediExpress(const std::string &medicamentos, const std::string &lab
  * @post Se crea un objeto de la clase MediExpress copiando el objeto pasado por cabecera
  */
 MediExpress::MediExpress(const MediExpress &orig):
-medication(orig.medication),labs(orig.labs),pharmacy(orig.pharmacy)
+medication(orig.medication),labs(orig.labs), pharmacy(orig.pharmacy)
 {}
 /**
  * @brief Operador de igualacion
@@ -398,7 +394,7 @@ VDinamico<Laboratorio*> MediExpress::buscarLabCiudad(const std::string &nombreCi
 /**
  * @brief Funcion para buscar compuestos en un vector dinamico de PaMedicamento
  * @param nombrePA  pasado por referencia
- * @return auxiliar vector con los medicamentos que contienen el nombre pasado por referencia
+ * @return vector con los medicamentos que contienen el nombre pasado por referencia
  * @post se crea un vector auxiliar y se inserta en el lo medicametnos convenientes
  */
 VDinamico<PaMedicamento*> MediExpress::buscaCompuesto(const std::string &nombrePA) {
@@ -462,10 +458,9 @@ void MediExpress::borrarLaboratorio(const std::string &nombreCiudad) {
  * @post El medicamento buscado es encontrado y devuelto, en caso de no encontrarse, se devuelve un puntero a null
  */
 PaMedicamento *MediExpress::buscaCompuesto(const int &ID_) {
-    PaMedicamento auxiliar;
     for(unsigned int i=0;i<medication.tamlog_();i++) {
         if(medication[i].get_id_num() == ID_) {
-            return &auxiliar;
+            return &medication[i];
         }
     }
     return 0;
